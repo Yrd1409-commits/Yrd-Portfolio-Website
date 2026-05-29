@@ -266,7 +266,7 @@ function Hero() {
               />
             </h1>
 
-            <div className="max-w-[21rem] pb-0 sm:max-w-sm md:mt-5 md:max-w-[31rem] md:pb-4 lg:mt-6">
+            <div className="max-w-[21rem] pb-0 max-md:mt-3 sm:max-w-sm md:mt-5 md:max-w-[31rem] md:pb-4 lg:mt-6">
               <motion.p
                 className="text-xs leading-[1.25] text-primary/75 drop-shadow-[0_1px_18px_rgba(0,0,0,0.45)] sm:text-sm md:text-base"
                 initial={{ y: 20, opacity: 0 }}
