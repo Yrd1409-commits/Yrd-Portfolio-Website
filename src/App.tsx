@@ -559,7 +559,7 @@ function IconLink({
   );
 }
 
-function JohnClarkAudiCaseStudy() {
+function JohnClarkAudiCaseStudyPage() {
   const buildItems = [
     'Campaign settings with Aberdeen and Dundee geo-targeting, plus Glasgow and Edinburgh deliberately excluded.',
     'Five intent-segmented ad groups built to serve both locations without duplicating budget across single-city groups.',
@@ -585,19 +585,29 @@ function JohnClarkAudiCaseStudy() {
   ];
 
   return (
-    <section
-      id="john-clark-audi-google-ads-case-study"
-      className="scroll-mt-10 bg-black px-4 py-20 sm:px-6 md:py-28"
-    >
-      <div className="mx-auto max-w-7xl">
-        <div className="grid gap-4 lg:grid-cols-[0.95fr_1.05fr]">
+    <main className="min-h-screen overflow-x-hidden bg-black px-4 py-4 sm:px-6 md:py-6" style={{ color: PRIMARY_TEXT }}>
+      <div className="mx-auto max-w-6xl">
+        <nav className="mb-4 flex items-center justify-between rounded-2xl bg-[#101010] px-4 py-3 text-[10px] uppercase tracking-[0.18em] text-primary/70 sm:text-xs">
+          <a href="/#work" className="transition-colors hover:text-primary">
+            Back to work
+          </a>
+          <a
+            href="/projects/john-clark-audi-google-ads-workbook.ods"
+            download
+            className="transition-colors hover:text-primary"
+          >
+            Download workbook
+          </a>
+        </nav>
+
+        <div className="grid gap-4 lg:grid-cols-[0.98fr_1.02fr]">
           <div className="rounded-2xl border border-white/[0.06] bg-[#101010] p-6 sm:p-8 lg:p-10">
             <p className="text-[10px] uppercase tracking-[0.22em] text-primary sm:text-xs">
               Marketing Project
             </p>
-            <h2 className="mt-5 max-w-2xl text-4xl font-medium leading-[0.9] tracking-[-0.06em] text-[#E1E0CC] sm:text-5xl md:text-6xl lg:text-7xl">
+            <h1 className="mt-5 max-w-2xl text-4xl font-medium leading-[0.92] tracking-[-0.04em] text-[#E1E0CC] sm:text-5xl md:text-6xl lg:text-7xl">
               John Clark Audi Google Ads account build
-            </h2>
+            </h1>
             <p className="mt-6 max-w-xl text-sm leading-relaxed text-primary/70 sm:text-base">
               A full search campaign structure, built from scratch on public data for the
               Aberdeen and Dundee Audi franchise. No account access, no client data - just a
@@ -637,7 +647,7 @@ function JohnClarkAudiCaseStudy() {
             <img
               src="/projects/john-clark-audi-google-ads.svg"
               alt=""
-              className="h-full min-h-[320px] w-full object-cover"
+              className="w-full object-contain"
             />
           </div>
         </div>
@@ -700,7 +710,7 @@ function JohnClarkAudiCaseStudy() {
           </p>
         </div>
       </div>
-    </section>
+    </main>
   );
 }
 
@@ -804,12 +814,15 @@ function ContactFooter() {
 }
 
 export default function App() {
+  if (window.location.pathname.replace(/\/$/, '') === '/work/john-clark-audi-google-ads') {
+    return <JohnClarkAudiCaseStudyPage />;
+  }
+
   return (
     <main className="min-h-screen overflow-x-hidden bg-black" style={{ color: PRIMARY_TEXT }}>
       <Hero />
       <About />
       <Work />
-      <JohnClarkAudiCaseStudy />
       <CurrentlyBuilding />
       <ContactFooter />
     </main>

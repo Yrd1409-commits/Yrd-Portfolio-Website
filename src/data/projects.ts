@@ -22,7 +22,7 @@ export const projects: Project[] = [
     description: 'Upload-ready search campaign architecture for Aberdeen and Dundee Audi.',
     tags: ['Google Ads', 'Search', 'Campaign Architecture', 'Automotive'],
     media: { type: 'image', src: '/projects/john-clark-audi-google-ads.svg' },
-    links: { caseStudy: '#john-clark-audi-google-ads-case-study' },
+    links: { caseStudy: '/work/john-clark-audi-google-ads' },
     date: '2026-05',
   },
   {

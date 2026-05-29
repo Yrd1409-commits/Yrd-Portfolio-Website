@@ -1,68 +1,76 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1400" height="788" viewBox="0 0 1400 788" role="img" aria-labelledby="title desc">
   <title id="title">John Clark Audi Google Ads account build thumbnail</title>
-  <desc id="desc">A dark cinematic workbook mockup showing Google Ads campaign architecture, RSA character counts, and negative keyword reasoning.</desc>
+  <desc id="desc">A dark workbook-style portfolio thumbnail for a Google Ads account build.</desc>
   <defs>
-    <radialGradient id="wash" cx="70%" cy="20%" r="85%">
-      <stop offset="0" stop-color="#3e443a"/>
-      <stop offset="0.45" stop-color="#171917"/>
+    <radialGradient id="bg" cx="78%" cy="12%" r="86%">
+      <stop offset="0" stop-color="#46503f"/>
+      <stop offset="0.48" stop-color="#171917"/>
       <stop offset="1" stop-color="#050505"/>
     </radialGradient>
-    <linearGradient id="card" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#2c2c29"/>
-      <stop offset="1" stop-color="#111111"/>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2a2b28"/>
+      <stop offset="1" stop-color="#10100f"/>
     </linearGradient>
-    <filter id="grain">
+    <filter id="noise">
       <feTurbulence type="fractalNoise" baseFrequency="0.78" numOctaves="3" stitchTiles="stitch"/>
       <feColorMatrix type="saturate" values="0"/>
       <feComponentTransfer>
-        <feFuncA type="table" tableValues="0 0.18"/>
+        <feFuncA type="table" tableValues="0 0.15"/>
       </feComponentTransfer>
     </filter>
   </defs>
 
-  <rect width="1400" height="788" fill="url(#wash)"/>
-  <rect width="1400" height="788" filter="url(#grain)" opacity="0.55"/>
+  <rect width="1400" height="788" fill="url(#bg)"/>
+  <rect width="1400" height="788" filter="url(#noise)" opacity="0.52"/>
 
-  <g transform="translate(82 82)">
-    <text x="0" y="0" fill="#DEDBC8" font-family="Almarai, Arial, sans-serif" font-size="26" letter-spacing="5">MARKETING PROJECT</text>
-    <text x="0" y="70" fill="#E1E0CC" font-family="Almarai, Arial, sans-serif" font-size="82" font-weight="700">John Clark Audi</text>
-    <text x="0" y="126" fill="#A8A793" font-family="Almarai, Arial, sans-serif" font-size="32">Google Ads account build</text>
-  </g>
+  <g transform="translate(86 92)">
+    <text x="0" y="0" fill="#DEDBC8" font-family="Almarai, Arial, sans-serif" font-size="24" letter-spacing="5" dominant-baseline="hanging">MARKETING PROJECT</text>
+    <text x="0" y="74" fill="#E1E0CC" font-family="Almarai, Arial, sans-serif" font-size="86" font-weight="700" dominant-baseline="hanging">John Clark</text>
+    <text x="0" y="156" fill="#E1E0CC" font-family="Almarai, Arial, sans-serif" font-size="86" font-weight="700" dominant-baseline="hanging">Audi</text>
+    <text x="0" y="272" fill="#A8A793" font-family="Almarai, Arial, sans-serif" font-size="31" dominant-baseline="hanging">Google Ads account build</text>
 
-  <g transform="translate(620 82)">
-    <rect x="0" y="0" width="682" height="546" rx="28" fill="url(#card)" stroke="#DEDBC8" stroke-opacity="0.16"/>
-    <rect x="34" y="38" width="614" height="70" rx="18" fill="#0b0b0b" stroke="#ffffff" stroke-opacity="0.08"/>
-    <circle cx="72" cy="73" r="10" fill="#A8B89C"/>
-    <text x="98" y="82" fill="#E1E0CC" font-family="Almarai, Arial, sans-serif" font-size="28" font-weight="700">RSA Headlines</text>
-    <text x="500" y="82" fill="#A8B89C" font-family="Almarai, Arial, sans-serif" font-size="22">15 / group</text>
-
-    <g font-family="Almarai, Arial, sans-serif" font-size="20">
-      <rect x="34" y="142" width="614" height="54" rx="13" fill="#181818"/>
-      <text x="58" y="176" fill="#DEDBC8">Approved Used Audi</text>
-      <text x="544" y="176" fill="#A8B89C">18</text>
-
-      <rect x="34" y="208" width="614" height="54" rx="13" fill="#151515"/>
-      <text x="58" y="242" fill="#DEDBC8">Reserve Online For &#163;99</text>
-      <text x="544" y="242" fill="#A8B89C">22</text>
-
-      <rect x="34" y="274" width="614" height="54" rx="13" fill="#181818"/>
-      <text x="58" y="308" fill="#DEDBC8">&#163;250 Deposit Boost</text>
-      <text x="544" y="308" fill="#A8B89C">18</text>
+    <g transform="translate(0 392)" font-family="Almarai, Arial, sans-serif">
+      <rect x="0" y="0" width="420" height="82" rx="41" fill="#DEDBC8"/>
+      <text x="38" y="42" fill="#000000" font-size="25" font-weight="700" dominant-baseline="middle">Campaign architecture</text>
+      <circle cx="364" cy="41" r="29" fill="#000000"/>
+      <path d="M355 41h18m-7-8 8 8-8 8" stroke="#DEDBC8" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
     </g>
 
-    <rect x="34" y="372" width="292" height="112" rx="20" fill="#0f0f0f" stroke="#ffffff" stroke-opacity="0.08"/>
-    <text x="58" y="412" fill="#9CA8B8" font-family="Almarai, Arial, sans-serif" font-size="20" font-weight="700">Negative keywords</text>
-    <text x="58" y="448" fill="#77786e" font-family="Almarai, Arial, sans-serif" font-size="17">Campaign + ad-group level</text>
-
-    <rect x="356" y="372" width="292" height="112" rx="20" fill="#0f0f0f" stroke="#ffffff" stroke-opacity="0.08"/>
-    <text x="380" y="412" fill="#DEDBC8" font-family="Almarai, Arial, sans-serif" font-size="20" font-weight="700">Aberdeen + Dundee</text>
-    <text x="380" y="448" fill="#77786e" font-family="Almarai, Arial, sans-serif" font-size="17">Two-location franchise map</text>
+    <g transform="translate(0 518)" font-family="Almarai, Arial, sans-serif" font-size="18">
+      <text x="0" y="0" fill="#77786E" dominant-baseline="hanging">Aberdeen + Dundee franchise structure</text>
+      <text x="0" y="34" fill="#77786E" dominant-baseline="hanging">Keywords, RSAs, negatives and extensions</text>
+    </g>
   </g>
 
-  <g transform="translate(82 544)" font-family="Almarai, Arial, sans-serif">
-    <rect x="0" y="0" width="430" height="84" rx="42" fill="#DEDBC8"/>
-    <text x="42" y="54" fill="#000000" font-size="26" font-weight="700">Campaign Architecture</text>
-    <circle cx="372" cy="42" r="30" fill="#000000"/>
-    <path d="M363 42h18m-7-8 8 8-8 8" stroke="#DEDBC8" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <g transform="translate(650 92)">
+    <rect x="0" y="0" width="662" height="540" rx="28" fill="url(#panel)" stroke="#DEDBC8" stroke-opacity="0.16"/>
+    <rect x="34" y="34" width="594" height="70" rx="18" fill="#0B0B0B" stroke="#FFFFFF" stroke-opacity="0.08"/>
+    <circle cx="72" cy="69" r="10" fill="#A8B89C"/>
+    <text x="98" y="70" fill="#E1E0CC" font-family="Almarai, Arial, sans-serif" font-size="27" font-weight="700" dominant-baseline="middle">Responsive Search Ads</text>
+    <text x="504" y="70" fill="#A8B89C" font-family="Almarai, Arial, sans-serif" font-size="21" dominant-baseline="middle">15 / group</text>
+
+    <g font-family="Almarai, Arial, sans-serif" font-size="20">
+      <rect x="34" y="138" width="594" height="54" rx="13" fill="#181818"/>
+      <text x="58" y="166" fill="#DEDBC8" dominant-baseline="middle">Approved Used Audi</text>
+      <text x="548" y="166" fill="#A8B89C" dominant-baseline="middle">18</text>
+
+      <rect x="34" y="204" width="594" height="54" rx="13" fill="#151515"/>
+      <text x="58" y="232" fill="#DEDBC8" dominant-baseline="middle">Reserve Online For &#163;99</text>
+      <text x="548" y="232" fill="#A8B89C" dominant-baseline="middle">22</text>
+
+      <rect x="34" y="270" width="594" height="54" rx="13" fill="#181818"/>
+      <text x="58" y="298" fill="#DEDBC8" dominant-baseline="middle">&#163;250 Deposit Boost</text>
+      <text x="548" y="298" fill="#A8B89C" dominant-baseline="middle">18</text>
+    </g>
+
+    <g font-family="Almarai, Arial, sans-serif">
+      <rect x="34" y="374" width="282" height="112" rx="20" fill="#0F0F0F" stroke="#FFFFFF" stroke-opacity="0.08"/>
+      <text x="58" y="410" fill="#9CA8B8" font-size="20" font-weight="700" dominant-baseline="middle">Negative keywords</text>
+      <text x="58" y="448" fill="#77786E" font-size="17" dominant-baseline="middle">Campaign + ad-group level</text>
+
+      <rect x="346" y="374" width="282" height="112" rx="20" fill="#0F0F0F" stroke="#FFFFFF" stroke-opacity="0.08"/>
+      <text x="370" y="410" fill="#DEDBC8" font-size="20" font-weight="700" dominant-baseline="middle">8 workbook tabs</text>
+      <text x="370" y="448" fill="#77786E" font-size="17" dominant-baseline="middle">Full account structure</text>
+    </g>
   </g>
 </svg>
