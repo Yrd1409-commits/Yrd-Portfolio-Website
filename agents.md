@@ -51,6 +51,8 @@ Use `npm.cmd` on Windows because PowerShell may block `npm.ps1`.
   - Card data: `src/data/projects.ts`
   - Route: `/work/aligngrowth-booking-recovery`
   - Thumbnail: `public/projects/aligngrowth-flow-new-booking.png`
+  - Brand/logo asset: `public/projects/aligngrowth-logo.png`
+  - External service-agency link: `https://aligngrowthuk.com/`
   - Supporting workflow images:
     - `public/projects/aligngrowth-flow-new-booking.png`
     - `public/projects/aligngrowth-flow-missed-call.png`

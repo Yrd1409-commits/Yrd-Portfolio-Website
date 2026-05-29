@@ -850,12 +850,33 @@ function AlignGrowthBookingRecoveryCaseStudyPage() {
             </div>
 
             <div className="border-t border-white/[0.06] bg-[#171717] p-4 lg:border-l lg:border-t-0 lg:p-5">
-              <div className="overflow-hidden rounded-2xl border border-white/[0.06] bg-[#202020]">
-                <img
-                  src="/projects/aligngrowth-flow-new-booking.png"
-                  alt=""
-                  className="block aspect-[16/9] h-auto w-full object-cover object-center"
+              <div className="relative flex min-h-[300px] flex-col justify-between overflow-hidden rounded-2xl border border-white/[0.06] bg-[#070d17] p-5 sm:min-h-[360px] sm:p-7">
+                <div className="bg-noise pointer-events-none absolute inset-0 opacity-[0.12]" aria-hidden="true" />
+                <div
+                  className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(10,174,235,0.16),transparent_38%),linear-gradient(180deg,rgba(255,255,255,0.05),transparent_54%)]"
+                  aria-hidden="true"
                 />
+                <div className="relative flex min-h-[170px] items-center justify-center sm:min-h-[220px]">
+                  <img
+                    src="/projects/aligngrowth-logo.png"
+                    alt="AlignGrowth"
+                    className="block w-full max-w-[520px] object-contain"
+                  />
+                </div>
+                <div className="relative flex flex-col gap-4 border-t border-white/[0.08] pt-5 sm:flex-row sm:items-center sm:justify-between">
+                  <p className="max-w-sm text-sm leading-relaxed text-primary/65">
+                    AlignGrowth is the service agency brand behind this booking recovery MVP.
+                  </p>
+                  <a
+                    href="https://aligngrowthuk.com/"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex w-fit items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-primary transition-colors hover:border-primary/40 hover:text-[#E1E0CC] active:scale-[0.98]"
+                  >
+                    Visit site
+                    <ExternalLink className="h-4 w-4" strokeWidth={1.8} />
+                  </a>
+                </div>
               </div>
               <div className="mt-4 grid gap-3 sm:grid-cols-2">
                 {stats.map((stat) => (
@@ -963,6 +984,34 @@ function AlignGrowthBookingRecoveryCaseStudyPage() {
                 <span>{item}</span>
               </div>
             ))}
+          </div>
+        </section>
+
+        <section className="mt-4 rounded-2xl border border-white/[0.06] bg-[#101010] p-6 sm:p-8">
+          <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+            <div>
+              <p className="text-[10px] uppercase tracking-[0.22em] text-primary sm:text-xs">
+                Work with AlignGrowth
+              </p>
+              <h2 className="mt-3 text-2xl font-medium leading-tight text-[#E1E0CC] sm:text-3xl">
+                Want this adapted for your clinic or service business?
+              </h2>
+              <p className="mt-3 max-w-3xl text-sm leading-relaxed text-gray-400 sm:text-base">
+                The MVP can be shaped around your booking tools, missed-call process, calendar,
+                SMS follow-up and reporting needs.
+              </p>
+            </div>
+            <a
+              href="https://aligngrowthuk.com/"
+              target="_blank"
+              rel="noreferrer"
+              className="group inline-flex w-fit shrink-0 items-center gap-2 rounded-full bg-primary py-2 pl-5 pr-2 text-sm font-medium text-black transition-[gap,transform] duration-300 hover:gap-3 active:scale-[0.98]"
+            >
+              Visit AlignGrowth
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-black transition-transform duration-300 group-hover:scale-110">
+                <ExternalLink className="h-4 w-4 text-primary" strokeWidth={1.8} />
+              </span>
+            </a>
           </div>
         </section>
 
