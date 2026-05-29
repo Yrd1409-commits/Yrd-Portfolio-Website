@@ -16,17 +16,19 @@ import {
   ExternalLink,
   Github,
   Mail,
+  Menu,
   Sparkles,
   Workflow,
+  X,
 } from 'lucide-react';
 import { Category, Project, projects } from './data/projects';
 import { LearningIcon, LearningItem, learning } from './data/learning';
-import { HeroScene } from './components/HeroScene';
 
 const PRIMARY_TEXT = '#E1E0CC';
-const NAV_COLOR = 'rgba(225, 224, 204, 0.8)';
 const EASE_OUT = [0.16, 1, 0.3, 1] as const;
 const CARD_EASE = [0.22, 1, 0.36, 1] as const;
+const BG_VIDEO =
+  'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260511_230229_7c9bc431-46cf-489a-948d-e8144d8eb5d4.mp4';
 
 const filters: Array<'All' | Category> = [
   'All',
@@ -176,51 +178,122 @@ function ScrollCharacter({
   return <motion.span style={{ opacity }}>{character}</motion.span>;
 }
 
-function NavLink({ href, children }: { href: string; children: string }) {
-  return (
-    <a
-      href={href}
-      className="transition-colors duration-300"
-      style={{ color: NAV_COLOR }}
-      onMouseEnter={(event) => {
-        event.currentTarget.style.color = PRIMARY_TEXT;
-      }}
-      onMouseLeave={(event) => {
-        event.currentTarget.style.color = NAV_COLOR;
-      }}
-    >
-      {children}
-    </a>
-  );
-}
-
 function Hero() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const navLinks = [
+    { label: 'Work', href: '#work', active: true },
+    { label: 'About', href: '#about' },
+    { label: 'Contact', href: '#contact' },
+  ];
+
   return (
     <section className="relative bg-black px-3 pb-0 pt-3 md:min-h-[100dvh] md:p-6">
-      <div className="relative min-h-[72dvh] overflow-hidden rounded-2xl bg-black sm:min-h-[78dvh] md:min-h-[calc(100dvh-3rem)] md:rounded-[2rem]">
-        <div className="ambient-gradient absolute inset-0 opacity-60" aria-hidden="true" />
-        <HeroScene />
-        <div
-          className="noise-overlay pointer-events-none absolute inset-0 opacity-[0.7] mix-blend-overlay"
+      <div className="relative isolate min-h-[76dvh] overflow-hidden rounded-2xl bg-black sm:min-h-[82dvh] md:min-h-[calc(100dvh-3rem)] md:rounded-[2rem]">
+        <div className="ambient-gradient absolute inset-0 opacity-70" aria-hidden="true" />
+        <video
+          className="absolute inset-0 h-full w-full object-cover opacity-80"
+          src={BG_VIDEO}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
           aria-hidden="true"
         />
         <div
-          className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/60"
+          className="noise-overlay pointer-events-none absolute inset-0 opacity-[0.55] mix-blend-overlay"
+          aria-hidden="true"
+        />
+        <div
+          className="absolute inset-0 bg-[radial-gradient(circle_at_72%_34%,rgba(222,219,200,0.18),transparent_30%),linear-gradient(180deg,rgba(0,0,0,0.42),rgba(0,0,0,0.08)_42%,rgba(0,0,0,0.78))]"
           aria-hidden="true"
         />
 
-        <nav className="absolute left-1/2 top-0 z-20 max-w-[calc(100%-2rem)] -translate-x-1/2 overflow-hidden rounded-b-2xl bg-black px-3 py-2 md:rounded-b-3xl md:px-8">
-          <div className="flex items-center justify-center gap-2 whitespace-nowrap text-[9px] font-normal uppercase tracking-[0.08em] sm:gap-6 sm:text-xs sm:tracking-[0.16em] md:gap-12 md:text-sm lg:gap-14">
-            <NavLink href="#work">Work</NavLink>
-            <NavLink href="#about">About</NavLink>
-            <NavLink href="#contact">Contact</NavLink>
+        <nav className="absolute left-0 right-0 top-0 z-20 flex items-center justify-between gap-4 px-4 py-4 sm:px-6 md:px-8">
+          <a
+            href="/"
+            className="liquid-glass inline-flex items-center rounded-full px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-primary/85 transition-colors hover:text-primary"
+          >
+            Yash Raj
+          </a>
+
+          <div className="liquid-glass hidden items-center gap-1 rounded-2xl px-2 py-2 md:flex">
+            {navLinks.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                className={`rounded-xl px-4 py-2 text-sm font-medium transition-colors ${
+                  link.active ? 'bg-primary/15 text-primary' : 'text-primary/65 hover:text-primary'
+                }`}
+              >
+                {link.label}
+              </a>
+            ))}
           </div>
+
+          <div className="hidden items-center gap-3 md:flex">
+            <a
+              href="#contact"
+              className="liquid-glass rounded-full px-4 py-2.5 text-sm font-medium text-primary transition-colors hover:bg-white/5"
+            >
+              Get in touch
+            </a>
+            <a
+              href="#work"
+              className="rounded-full bg-primary px-4 py-2.5 text-sm font-medium text-black transition-colors hover:bg-[#E1E0CC]"
+            >
+              See work
+            </a>
+          </div>
+
+          <button
+            type="button"
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((isOpen) => !isOpen)}
+            className="liquid-glass rounded-xl p-2 text-primary transition-colors hover:bg-white/5 md:hidden"
+          >
+            {menuOpen ? <X className="h-5 w-5" strokeWidth={1.8} /> : <Menu className="h-5 w-5" strokeWidth={1.8} />}
+          </button>
         </nav>
 
-        <div className="absolute bottom-[clamp(3rem,8dvh,4.5rem)] left-0 right-0 p-4 sm:bottom-[clamp(4rem,10dvh,6rem)] sm:p-6 md:bottom-0 md:p-8 lg:p-10">
+        {menuOpen ? (
+          <div className="liquid-glass absolute left-4 right-4 top-[72px] z-30 flex flex-col gap-1 rounded-2xl p-4 md:hidden">
+            {navLinks.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                onClick={() => setMenuOpen(false)}
+                className={`w-full rounded-xl px-4 py-3 text-sm font-medium transition-colors ${
+                  link.active ? 'bg-primary/15 text-primary' : 'text-primary/70 hover:text-primary'
+                }`}
+              >
+                {link.label}
+              </a>
+            ))}
+            <div className="mt-2 flex gap-2 border-t border-white/10 pt-3">
+              <a
+                href="#contact"
+                onClick={() => setMenuOpen(false)}
+                className="liquid-glass flex-1 rounded-full px-4 py-3 text-center text-sm font-medium text-primary"
+              >
+                Contact
+              </a>
+              <a
+                href="#work"
+                onClick={() => setMenuOpen(false)}
+                className="flex-1 rounded-full bg-primary px-4 py-3 text-center text-sm font-medium text-black"
+              >
+                Work
+              </a>
+            </div>
+          </div>
+        ) : null}
+
+        <div className="absolute bottom-[clamp(2rem,6dvh,4rem)] left-0 right-0 p-4 sm:bottom-[clamp(3rem,8dvh,5.5rem)] sm:p-6 md:bottom-0 md:p-8 lg:p-10">
           <div className="grid min-w-0 items-end gap-4 sm:gap-5 lg:grid-cols-12 lg:gap-8">
             <h1
-              className="min-w-0 lg:col-span-7 xl:col-span-8"
+              className="min-w-0 lg:col-span-8"
               aria-label="Yash Raj"
               style={{ color: PRIMARY_TEXT }}
             >
@@ -231,9 +304,9 @@ function Hero() {
               />
             </h1>
 
-            <div className="max-w-[20rem] pb-0 sm:max-w-sm md:pb-4 lg:col-span-5 lg:ml-auto xl:col-span-4">
+            <div className="max-w-[21rem] pb-0 sm:max-w-sm md:pb-4 lg:col-span-4 lg:ml-auto">
               <motion.p
-                className="text-xs leading-[1.2] text-primary/70 sm:text-sm md:text-base"
+                className="text-xs leading-[1.25] text-primary/75 drop-shadow-[0_1px_18px_rgba(0,0,0,0.45)] sm:text-sm md:text-base"
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.5, ease: EASE_OUT }}
@@ -245,7 +318,7 @@ function Hero() {
 
               <motion.a
                 href="#work"
-                className="group mt-4 inline-flex items-center gap-2 rounded-full bg-primary py-2 pl-5 pr-2 text-sm font-medium text-black transition-[gap,transform] duration-300 hover:gap-3 active:scale-[0.98] sm:mt-5 sm:text-base"
+                className="group mt-4 inline-flex items-center gap-2 rounded-full bg-primary py-2 pl-5 pr-2 text-sm font-medium text-black transition-[gap,transform] duration-300 hover:gap-3 hover:bg-[#E1E0CC] active:scale-[0.98] sm:mt-5 sm:text-base"
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.7, ease: EASE_OUT }}
@@ -254,6 +327,15 @@ function Hero() {
                 <span className="flex h-9 w-9 items-center justify-center rounded-full bg-black transition-transform duration-300 group-hover:scale-110 sm:h-10 sm:w-10">
                   <ArrowRight className="h-4 w-4 text-primary" strokeWidth={1.8} />
                 </span>
+              </motion.a>
+              <motion.a
+                href="#about"
+                className="liquid-glass ml-2 mt-4 inline-flex rounded-full px-5 py-3 text-sm font-medium text-primary transition-colors hover:bg-white/5 active:scale-[0.98] sm:ml-3 sm:mt-5 sm:text-base"
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.8, ease: EASE_OUT }}
+              >
+                About me
               </motion.a>
             </div>
           </div>
