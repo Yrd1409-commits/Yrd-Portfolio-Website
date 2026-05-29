@@ -308,9 +308,9 @@ function About() {
             className="justify-center"
             segments={[
               { text: "I'm Yash Raj,", className: 'font-normal' },
-              { text: 'a marketer turned builder.', className: 'font-serif italic' },
+              { text: 'an aspiring paid media marketer.', className: 'font-serif italic' },
               {
-                text: 'I work across paid media, automation, and the web.',
+                text: 'I build campaign plans, automations, and web projects as I learn.',
                 className: 'font-normal',
               },
             ]}
@@ -318,7 +318,7 @@ function About() {
         </h2>
         <AnimatedLetter
           className="mx-auto mt-8 max-w-3xl break-words text-xs leading-relaxed text-[#DEDBC8] sm:text-sm md:text-base"
-          text="Over the last few years I've gone from running campaigns to building the systems behind them - Google Ads and SEO, then n8n and GoHighLevel automations, and now code. This site is where I ship that work as I learn, from spec campaigns to full-stack builds."
+          text="I'm a Google Ads Search and GA4 certified digital marketer based in Glasgow, building hands-on projects around PPC campaign structure, RSA copy, negative keywords, conversion tracking, reporting, and marketing automation. Before moving into paid media, I spent 4+ years in customer-facing hospitality roles, which shaped how I communicate with clients and understand service businesses. This portfolio is where I document the work I'm building as I move toward my first paid media role."
         />
       </div>
     </section>
