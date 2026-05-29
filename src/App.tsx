@@ -170,10 +170,10 @@ function ScrollCharacter({
   const opacity = useTransform(
     progress,
     [Math.max(0, charProgress - 0.1), Math.min(1, charProgress + 0.05)],
-    [0.2, 1],
+    [0.42, 1],
   );
 
-  return <motion.span style={{ opacity }}>{character === ' ' ? '\u00A0' : character}</motion.span>;
+  return <motion.span style={{ opacity }}>{character}</motion.span>;
 }
 
 function NavLink({ href, children }: { href: string; children: string }) {
@@ -218,20 +218,20 @@ function Hero() {
         </nav>
 
         <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-8 lg:p-10">
-          <div className="grid items-end gap-5 lg:grid-cols-12 lg:gap-8">
+          <div className="grid min-w-0 items-end gap-5 lg:grid-cols-12 lg:gap-8">
             <h1
-              className="lg:col-span-8"
+              className="min-w-0 lg:col-span-7 xl:col-span-8"
               aria-label="Yash Raj"
               style={{ color: PRIMARY_TEXT }}
             >
               <WordsPullUp
                 text="Yash Raj"
                 showAsterisk
-                className="whitespace-nowrap text-[16vw] font-medium leading-[0.85] tracking-[-0.07em] sm:text-[18vw] md:text-[16vw] lg:text-[15vw] xl:text-[14vw] 2xl:text-[14.5vw]"
+                className="max-w-full whitespace-nowrap text-[clamp(3.75rem,16vw,12.8rem)] font-medium leading-[0.85] tracking-[-0.07em] sm:text-[clamp(5.5rem,16vw,12.8rem)] lg:text-[clamp(7rem,13.2vw,12.8rem)]"
               />
             </h1>
 
-            <div className="max-w-sm pb-2 lg:col-span-4 lg:ml-auto md:pb-4">
+            <div className="max-w-sm pb-2 md:pb-4 lg:col-span-5 lg:ml-auto xl:col-span-4">
               <motion.p
                 className="text-xs leading-[1.2] text-primary/70 sm:text-sm md:text-base"
                 initial={{ y: 20, opacity: 0 }}
@@ -282,7 +282,7 @@ function About() {
           />
         </h2>
         <AnimatedLetter
-          className="mx-auto mt-8 max-w-3xl text-xs leading-relaxed text-[#DEDBC8] sm:text-sm md:text-base"
+          className="mx-auto mt-8 max-w-3xl break-words text-xs leading-relaxed text-[#DEDBC8] sm:text-sm md:text-base"
           text="Over the last few years I've gone from running campaigns to building the systems behind them - Google Ads and SEO, then n8n and GoHighLevel automations, and now code. This site is where I ship that work as I learn, from spec campaigns to full-stack builds."
         />
       </div>
