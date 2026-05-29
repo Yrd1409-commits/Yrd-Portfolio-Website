@@ -8,7 +8,7 @@ export interface Project {
   status: Status;
   description: string;
   tags: string[];
-  media?: { type: 'image' | 'video'; src: string };
+  media?: { type: 'image' | 'video'; src: string; fit?: 'cover' | 'contain' };
   links?: { live?: string; repo?: string; caseStudy?: string };
   date: string;
 }
@@ -26,13 +26,14 @@ export const projects: Project[] = [
     date: '2026-05',
   },
   {
-    id: 'n8n-crm-sync',
-    title: 'n8n to Google Sheets CRM automation',
+    id: 'aligngrowth-booking-recovery',
+    title: 'AlignGrowth booking recovery MVP',
     category: 'Automation',
-    status: 'Live',
-    description: 'Lead capture to CRM sync with OAuth-handled Sheets node.',
-    tags: ['n8n', 'Google Sheets API', 'OAuth'],
-    links: { live: '#' },
+    status: 'Case study',
+    description: 'n8n proof-of-concept for recovering bookings, missed calls and cancellations.',
+    tags: ['n8n', 'Webhooks', 'Google Sheets', 'Lead Recovery'],
+    media: { type: 'image', src: '/projects/aligngrowth-booking-recovery.png', fit: 'contain' },
+    links: { caseStudy: '/work/aligngrowth-booking-recovery' },
     date: '2026-05',
   },
   {

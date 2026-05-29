@@ -449,7 +449,11 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
     >
       <div className="relative aspect-video overflow-hidden">
         {project.media?.type === 'image' ? (
-          <img src={project.media.src} alt="" className="h-full w-full object-cover" />
+          <img
+            src={project.media.src}
+            alt=""
+            className={`h-full w-full ${project.media.fit === 'contain' ? 'object-contain p-3' : 'object-cover'}`}
+          />
         ) : project.media?.type === 'video' ? (
           <video
             src={project.media.src}
@@ -749,6 +753,154 @@ function JohnClarkAudiCaseStudyPage() {
   );
 }
 
+function AlignGrowthBookingRecoveryCaseStudyPage() {
+  const flowItems = [
+    'New booking intake captures service, preferred date and time, checks required fields, creates a test appointment path and logs the result.',
+    'Missed call recovery captures caller details, creates a follow-up SMS path and records the recovery attempt in Google Sheets.',
+    'Cancellation recovery finds the appointment, updates status, sends the cancellation path and logs success or not-found outcomes.',
+    'Reschedule recovery finds the original appointment, updates the new date and time, sends a reschedule path and records the result.',
+  ];
+
+  const buildItems = [
+    'Webhook entry points for booking, missed call, cancellation and reschedule events.',
+    'Set nodes that clean incoming payloads into consistent fields before branching.',
+    'IF branches that reject wrong event types and catch missing details before the workflow continues.',
+    'Google Sheets logging across appointment, follow-up and recovery report tabs.',
+    'Manual SMS placeholder nodes for the MVP, ready to swap for Twilio, voice or clinic-specific messaging.',
+    'Disabled Calendar, Cal.com and Twilio nodes kept in the workflow as integration points for a real client setup.',
+  ];
+
+  const proofCards = [
+    {
+      title: '4 recovery journeys',
+      body: 'New bookings, missed calls, cancellations and reschedules are handled as separate but connected flows.',
+    },
+    {
+      title: '72 n8n nodes',
+      body: 'The proof-of-concept covers intake, validation, branching, status updates, logging and response handling.',
+    },
+    {
+      title: 'Configurable by clinic',
+      body: 'Calendar, voice, SMS and extra service hooks can be attached based on each business requirement.',
+    },
+  ];
+
+  return (
+    <main className="min-h-screen overflow-x-hidden bg-black px-4 py-4 sm:px-6 md:py-6" style={{ color: PRIMARY_TEXT }}>
+      <div className="mx-auto max-w-6xl">
+        <nav className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-[#101010] px-4 py-3 text-[10px] uppercase tracking-[0.18em] text-primary/70 sm:text-xs">
+          <a href="/#work" className="transition-colors hover:text-primary">
+            Back to work
+          </a>
+          <span>Automation MVP</span>
+        </nav>
+
+        <div className="grid min-w-0 grid-cols-1 gap-4 lg:grid-cols-[0.96fr_1.04fr]">
+          <div className="rounded-2xl border border-white/[0.06] bg-[#101010] p-6 sm:p-8 lg:p-10">
+            <p className="text-[10px] uppercase tracking-[0.22em] text-primary sm:text-xs">
+              Automation
+            </p>
+            <h1 className="mt-5 max-w-2xl text-4xl font-medium leading-[0.92] tracking-[-0.04em] text-[#E1E0CC] sm:text-5xl md:text-6xl lg:text-7xl">
+              AlignGrowth booking recovery MVP
+            </h1>
+            <p className="mt-6 max-w-xl text-sm leading-relaxed text-primary/75 sm:text-base">
+              A proof-of-concept n8n system for aesthetics clinics that captures booking,
+              missed call, cancellation and reschedule events, then routes each one into a
+              recovery flow with logging and follow-up placeholders.
+            </p>
+            <div className="mt-7 flex flex-wrap gap-2">
+              {['n8n', 'Webhooks', 'Google Sheets', 'Lead Recovery', 'Aesthetics Clinics'].map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded-full border border-white/10 px-3 py-1 text-[10px] text-gray-500"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+            <div className="mt-8">
+              <a
+                href="/#work"
+                className="group inline-flex items-center gap-2 rounded-full bg-primary py-2 pl-5 pr-2 text-sm font-medium text-black transition-[gap,transform] duration-300 hover:gap-3 active:scale-[0.98]"
+              >
+                Back to work
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-black transition-transform duration-300 group-hover:scale-110">
+                  <ArrowRight className="h-4 w-4 text-primary" strokeWidth={1.8} />
+                </span>
+              </a>
+            </div>
+          </div>
+
+          <div className="min-w-0 overflow-hidden rounded-2xl border border-white/[0.06] bg-[#171717] p-3">
+            <img
+              src="/projects/aligngrowth-booking-recovery.png"
+              alt=""
+              className="block aspect-video h-auto max-h-[520px] w-full object-contain"
+            />
+          </div>
+        </div>
+
+        <div className="mt-4 grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
+          <div className="rounded-2xl border border-white/[0.06] bg-[#101010] p-6 sm:p-8">
+            <p className="text-[10px] uppercase tracking-[0.22em] text-primary sm:text-xs">
+              The idea
+            </p>
+            <h3 className="mt-4 text-2xl font-medium leading-tight text-[#E1E0CC] sm:text-3xl">
+              Recover the leads that normally leak out.
+            </h3>
+            <p className="mt-4 text-sm leading-relaxed text-gray-400">
+              This MVP is built for aesthetics clinics, but the pattern can work for other
+              appointment-led service businesses too: capture the event, decide what happened,
+              log it, and trigger the right follow-up path before the enquiry goes cold.
+            </p>
+            <p className="mt-4 text-sm leading-relaxed text-gray-400">
+              The current version uses test payloads and fake messaging nodes, so it demonstrates
+              the system design without claiming a finished production deployment.
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-white/[0.06] bg-[#101010] p-6 sm:p-8">
+            <p className="text-[10px] uppercase tracking-[0.22em] text-primary sm:text-xs">
+              The flows
+            </p>
+            <ul className="mt-5 space-y-3">
+              {flowItems.map((item) => (
+                <li key={item} className="flex gap-3 text-sm leading-relaxed text-gray-400">
+                  <Check className="mt-0.5 h-4 w-4 flex-none text-primary" strokeWidth={1.8} />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <div className="mt-4 rounded-2xl border border-white/[0.06] bg-[#101010] p-6 sm:p-8">
+          <p className="text-[10px] uppercase tracking-[0.22em] text-primary sm:text-xs">
+            The build
+          </p>
+          <div className="mt-5 grid gap-3 md:grid-cols-2">
+            {buildItems.map((item) => (
+              <div key={item} className="flex gap-3 rounded-2xl border border-white/[0.06] bg-[#171717] p-4 text-sm leading-relaxed text-gray-400">
+                <Check className="mt-0.5 h-4 w-4 flex-none text-primary" strokeWidth={1.8} />
+                <span>{item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-4 grid gap-4 md:grid-cols-3">
+          {proofCards.map((card) => (
+            <div key={card.title} className="rounded-2xl border border-white/[0.06] bg-[#212121] p-5">
+              <span className="text-sm font-medium text-[#E1E0CC]">{card.title}</span>
+              <p className="mt-3 text-sm leading-relaxed text-gray-500">{card.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </main>
+  );
+}
+
 function CurrentlyBuilding() {
   return (
     <section id="currently-building" className="relative overflow-hidden bg-black px-4 py-16 sm:px-6 md:py-20">
@@ -851,6 +1003,10 @@ function ContactFooter() {
 export default function App() {
   if (window.location.pathname.replace(/\/$/, '') === '/work/john-clark-audi-google-ads') {
     return <JohnClarkAudiCaseStudyPage />;
+  }
+
+  if (window.location.pathname.replace(/\/$/, '') === '/work/aligngrowth-booking-recovery') {
+    return <AlignGrowthBookingRecoveryCaseStudyPage />;
   }
 
   return (
