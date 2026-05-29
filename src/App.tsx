@@ -191,7 +191,7 @@ function Hero() {
       <div className="relative isolate min-h-[76dvh] overflow-hidden rounded-2xl bg-black sm:min-h-[82dvh] md:min-h-[calc(100dvh-3rem)] md:rounded-[2rem]">
         <div className="ambient-gradient absolute inset-0 opacity-70" aria-hidden="true" />
         <video
-          className="absolute inset-0 h-full w-full object-cover opacity-80"
+          className="absolute inset-0 h-full w-full object-cover object-center opacity-80 md:object-[42%_center] lg:object-[36%_center] xl:object-[32%_center]"
           src={BG_VIDEO}
           autoPlay
           muted
@@ -209,14 +209,7 @@ function Hero() {
           aria-hidden="true"
         />
 
-        <nav className="absolute left-0 right-0 top-0 z-20 flex items-center justify-between gap-4 px-4 py-4 sm:px-6 md:px-8">
-          <a
-            href="/"
-            className="liquid-glass inline-flex items-center rounded-full px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-primary/85 transition-colors hover:text-primary"
-          >
-            Yash Raj
-          </a>
-
+        <nav className="absolute left-0 right-0 top-0 z-20 flex items-center justify-center px-4 py-4 sm:px-6 md:px-8">
           <div className="liquid-glass hidden items-center gap-1 rounded-2xl px-2 py-2 md:flex">
             {navLinks.map((link) => (
               <a
@@ -231,27 +224,12 @@ function Hero() {
             ))}
           </div>
 
-          <div className="hidden items-center gap-3 md:flex">
-            <a
-              href="#contact"
-              className="liquid-glass rounded-full px-4 py-2.5 text-sm font-medium text-primary transition-colors hover:bg-white/5"
-            >
-              Get in touch
-            </a>
-            <a
-              href="#work"
-              className="rounded-full bg-primary px-4 py-2.5 text-sm font-medium text-black transition-colors hover:bg-[#E1E0CC]"
-            >
-              See work
-            </a>
-          </div>
-
           <button
             type="button"
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((isOpen) => !isOpen)}
-            className="liquid-glass rounded-xl p-2 text-primary transition-colors hover:bg-white/5 md:hidden"
+            className="liquid-glass ml-auto rounded-xl p-2 text-primary transition-colors hover:bg-white/5 md:hidden"
           >
             {menuOpen ? <X className="h-5 w-5" strokeWidth={1.8} /> : <Menu className="h-5 w-5" strokeWidth={1.8} />}
           </button>
@@ -271,40 +249,24 @@ function Hero() {
                 {link.label}
               </a>
             ))}
-            <div className="mt-2 flex gap-2 border-t border-white/10 pt-3">
-              <a
-                href="#contact"
-                onClick={() => setMenuOpen(false)}
-                className="liquid-glass flex-1 rounded-full px-4 py-3 text-center text-sm font-medium text-primary"
-              >
-                Contact
-              </a>
-              <a
-                href="#work"
-                onClick={() => setMenuOpen(false)}
-                className="flex-1 rounded-full bg-primary px-4 py-3 text-center text-sm font-medium text-black"
-              >
-                Work
-              </a>
-            </div>
           </div>
         ) : null}
 
         <div className="absolute bottom-[clamp(2rem,6dvh,4rem)] left-0 right-0 p-4 sm:bottom-[clamp(3rem,8dvh,5.5rem)] sm:p-6 md:bottom-0 md:p-8 lg:p-10">
-          <div className="grid min-w-0 items-end gap-4 sm:gap-5 lg:grid-cols-12 lg:gap-8">
+          <div className="min-w-0 max-w-[46rem] lg:max-w-[58rem]">
             <h1
-              className="min-w-0 lg:col-span-8"
+              className="min-w-0"
               aria-label="Yash Raj"
               style={{ color: PRIMARY_TEXT }}
             >
               <WordsPullUp
                 text="Yash Raj"
                 showAsterisk
-                className="max-w-full whitespace-nowrap text-[clamp(3.75rem,16vw,12.8rem)] font-medium leading-[0.85] tracking-[-0.07em] sm:text-[clamp(5.5rem,16vw,12.8rem)] lg:text-[clamp(7rem,13.2vw,12.8rem)]"
+                className="max-w-full whitespace-nowrap text-[clamp(3.75rem,16vw,12.8rem)] font-medium leading-[0.85] tracking-[-0.07em] sm:text-[clamp(5.5rem,16vw,12.8rem)] lg:text-[clamp(6.75rem,12.4vw,11.8rem)]"
               />
             </h1>
 
-            <div className="max-w-[21rem] pb-0 sm:max-w-sm md:pb-4 lg:col-span-4 lg:ml-auto">
+            <div className="max-w-[21rem] pb-0 sm:max-w-sm md:mt-5 md:max-w-[31rem] md:pb-4 lg:mt-6">
               <motion.p
                 className="text-xs leading-[1.25] text-primary/75 drop-shadow-[0_1px_18px_rgba(0,0,0,0.45)] sm:text-sm md:text-base"
                 initial={{ y: 20, opacity: 0 }}
@@ -318,24 +280,15 @@ function Hero() {
 
               <motion.a
                 href="#work"
-                className="group mt-4 inline-flex items-center gap-2 rounded-full bg-primary py-2 pl-5 pr-2 text-sm font-medium text-black transition-[gap,transform] duration-300 hover:gap-3 hover:bg-[#E1E0CC] active:scale-[0.98] sm:mt-5 sm:text-base"
+                className="group mt-5 hidden w-fit items-center gap-3 rounded-full bg-primary px-5 py-3 text-sm font-medium text-black transition-colors hover:bg-primary/90 active:scale-[0.98] md:inline-flex"
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.7, ease: EASE_OUT }}
+                transition={{ duration: 0.8, delay: 0.65, ease: EASE_OUT }}
               >
-                See the work
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-black transition-transform duration-300 group-hover:scale-110 sm:h-10 sm:w-10">
-                  <ArrowRight className="h-4 w-4 text-primary" strokeWidth={1.8} />
+                <span>See the work</span>
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-black text-primary transition-transform duration-300 group-hover:translate-x-0.5">
+                  <ArrowRight className="h-4 w-4" strokeWidth={1.8} />
                 </span>
-              </motion.a>
-              <motion.a
-                href="#about"
-                className="liquid-glass ml-2 mt-4 inline-flex rounded-full px-5 py-3 text-sm font-medium text-primary transition-colors hover:bg-white/5 active:scale-[0.98] sm:ml-3 sm:mt-5 sm:text-base"
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.8, ease: EASE_OUT }}
-              >
-                About me
               </motion.a>
             </div>
           </div>
