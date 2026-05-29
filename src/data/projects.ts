@@ -15,18 +15,19 @@ export interface Project {
 
 export const projects: Project[] = [
   {
-    id: 'ppc-spec-campaign',
-    title: 'Spec Google Ads campaign - automotive',
+    id: 'john-clark-audi-google-ads',
+    title: 'John Clark Audi - Google Ads account build',
     category: 'Marketing Project',
     status: 'Case study',
-    description: 'Intent-segmented ad groups, validated RSAs, negative keyword strategy.',
-    tags: ['Google Ads', 'RSA', 'Sub-£0.50 CPC'],
-    links: { caseStudy: '#' },
-    date: '2026-04',
+    description: 'Upload-ready search campaign architecture for Aberdeen and Dundee Audi.',
+    tags: ['Google Ads', 'Search', 'Campaign Architecture', 'Automotive'],
+    media: { type: 'image', src: '/projects/john-clark-audi-google-ads.svg' },
+    links: { caseStudy: '#john-clark-audi-google-ads-case-study' },
+    date: '2026-05',
   },
   {
     id: 'n8n-crm-sync',
-    title: 'n8n → Google Sheets CRM automation',
+    title: 'n8n to Google Sheets CRM automation',
     category: 'Automation',
     status: 'Live',
     description: 'Lead capture to CRM sync with OAuth-handled Sheets node.',

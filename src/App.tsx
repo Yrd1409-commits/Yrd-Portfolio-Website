@@ -469,6 +469,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             {primaryAction ? (
               <a
                 href={primaryAction.href}
+                onClick={(event) => handleHashLinkClick(event, primaryAction.href)}
                 className="inline-flex items-center gap-1.5 text-sm font-medium text-primary transition-colors hover:text-[#E1E0CC]"
               >
                 {primaryAction.label}
@@ -521,6 +522,22 @@ function getPrimaryAction(project: Project) {
   return null;
 }
 
+function handleHashLinkClick(event: React.MouseEvent<HTMLAnchorElement>, href: string) {
+  if (!href.startsWith('#') || href.length < 2) {
+    return;
+  }
+
+  const target = document.querySelector(href);
+
+  if (!target) {
+    return;
+  }
+
+  event.preventDefault();
+  target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  window.history.pushState(null, '', href);
+}
+
 function IconLink({
   href,
   label,
@@ -534,10 +551,156 @@ function IconLink({
     <a
       href={href}
       aria-label={label}
+      onClick={(event) => handleHashLinkClick(event, href)}
       className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 text-primary/70 transition-colors duration-300 hover:border-primary/30 hover:text-primary active:scale-[0.98]"
     >
       {children}
     </a>
+  );
+}
+
+function JohnClarkAudiCaseStudy() {
+  const buildItems = [
+    'Campaign settings with Aberdeen and Dundee geo-targeting, plus Glasgow and Edinburgh deliberately excluded.',
+    'Five intent-segmented ad groups built to serve both locations without duplicating budget across single-city groups.',
+    'Keyword sets with match types assigned by intent, including Dundee variants alongside Aberdeen terms.',
+    'Campaign and ad-group negative keywords with written reasoning so the logic is transparent.',
+    'Responsive search ads with 15 headlines and 4 descriptions per ad group, validated against character limits.',
+    'Sitelinks, callouts and structured snippets built around Test Drive, Finance, Trade-In, Stock and Approved Used signals.',
+  ];
+
+  const proofCards = [
+    {
+      title: '8 workbook tabs',
+      body: 'Campaign settings, ad groups, keywords, negatives, RSA copy, extra RSAs, sitelinks and callouts/snippets.',
+    },
+    {
+      title: 'Two-location logic',
+      body: 'Aberdeen and Dundee are handled as one tightly themed Audi franchise structure instead of a single-city guess.',
+    },
+    {
+      title: 'Offer-led copy',
+      body: 'Real public offers were worked into the ad assets so search intent and landing-page message match.',
+    },
+  ];
+
+  return (
+    <section
+      id="john-clark-audi-google-ads-case-study"
+      className="scroll-mt-10 bg-black px-4 py-20 sm:px-6 md:py-28"
+    >
+      <div className="mx-auto max-w-7xl">
+        <div className="grid gap-4 lg:grid-cols-[0.95fr_1.05fr]">
+          <div className="rounded-2xl border border-white/[0.06] bg-[#101010] p-6 sm:p-8 lg:p-10">
+            <p className="text-[10px] uppercase tracking-[0.22em] text-primary sm:text-xs">
+              Marketing Project
+            </p>
+            <h2 className="mt-5 max-w-2xl text-4xl font-medium leading-[0.9] tracking-[-0.06em] text-[#E1E0CC] sm:text-5xl md:text-6xl lg:text-7xl">
+              John Clark Audi Google Ads account build
+            </h2>
+            <p className="mt-6 max-w-xl text-sm leading-relaxed text-primary/70 sm:text-base">
+              A full search campaign structure, built from scratch on public data for the
+              Aberdeen and Dundee Audi franchise. No account access, no client data - just a
+              defensible outside-in build.
+            </p>
+            <div className="mt-7 flex flex-wrap gap-2">
+              {['Google Ads', 'Search', 'Campaign Architecture', 'Automotive'].map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded-full border border-white/10 px-3 py-1 text-[10px] text-gray-500"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <a
+                href="/projects/john-clark-audi-google-ads-workbook.ods"
+                download
+                className="group inline-flex items-center gap-2 rounded-full bg-primary py-2 pl-5 pr-2 text-sm font-medium text-black transition-[gap,transform] duration-300 hover:gap-3 active:scale-[0.98]"
+              >
+                Download workbook
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-black transition-transform duration-300 group-hover:scale-110">
+                  <ArrowRight className="h-4 w-4 text-primary" strokeWidth={1.8} />
+                </span>
+              </a>
+              <a
+                href="#work"
+                className="inline-flex min-h-[52px] items-center rounded-full border border-white/10 px-5 text-sm font-medium text-primary/80 transition-colors hover:border-primary/35 hover:text-primary"
+              >
+                Back to work
+              </a>
+            </div>
+          </div>
+
+          <div className="overflow-hidden rounded-2xl border border-white/[0.06] bg-[#212121]">
+            <img
+              src="/projects/john-clark-audi-google-ads.svg"
+              alt=""
+              className="h-full min-h-[320px] w-full object-cover"
+            />
+          </div>
+        </div>
+
+        <div className="mt-4 grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
+          <div className="rounded-2xl border border-white/[0.06] bg-[#101010] p-6 sm:p-8">
+            <p className="text-[10px] uppercase tracking-[0.22em] text-primary sm:text-xs">
+              The approach
+            </p>
+            <h3 className="mt-4 text-2xl font-medium leading-tight text-[#E1E0CC] sm:text-3xl">
+              Message match before anything else.
+            </h3>
+            <p className="mt-4 text-sm leading-relaxed text-gray-400">
+              Most spec builds skip the research and jump straight to keywords. I started on
+              John Clark's live Audi pages, pulled the actual offers, then built the campaign
+              around what a searcher would really land on.
+            </p>
+            <p className="mt-4 text-sm leading-relaxed text-gray-400">
+              This is a self-initiated sample build. It is not affiliated with or endorsed by
+              John Clark Motor Group or Audi.
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-white/[0.06] bg-[#101010] p-6 sm:p-8">
+            <p className="text-[10px] uppercase tracking-[0.22em] text-primary sm:text-xs">
+              The build
+            </p>
+            <ul className="mt-5 space-y-3">
+              {buildItems.map((item) => (
+                <li key={item} className="flex gap-3 text-sm leading-relaxed text-gray-400">
+                  <Check className="mt-0.5 h-4 w-4 flex-none text-primary" strokeWidth={1.8} />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <div className="mt-4 grid gap-4 md:grid-cols-3">
+          {proofCards.map((card) => (
+            <div key={card.title} className="rounded-2xl border border-white/[0.06] bg-[#212121] p-5">
+              <span className="text-sm font-medium text-[#E1E0CC]">{card.title}</span>
+              <p className="mt-3 text-sm leading-relaxed text-gray-500">{card.body}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-4 rounded-2xl border border-white/[0.06] bg-[#101010] p-6 sm:p-8 lg:p-10">
+          <p className="text-[10px] uppercase tracking-[0.22em] text-primary sm:text-xs">
+            The honest close
+          </p>
+          <h3 className="mt-4 text-2xl font-medium leading-tight text-[#E1E0CC] sm:text-3xl">
+            The first move would still be an audit.
+          </h3>
+          <p className="mt-4 max-w-4xl text-sm leading-relaxed text-gray-400 sm:text-base">
+            This is how I would approach the account from the outside - a thinking exercise, not
+            a campaign I would switch on blind. The real first move in the seat would be auditing
+            the live account, pulling 90 days of search-query data, finding where budget is leaking
+            and fixing that before adding anything new.
+          </p>
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -646,6 +809,7 @@ export default function App() {
       <Hero />
       <About />
       <Work />
+      <JohnClarkAudiCaseStudy />
       <CurrentlyBuilding />
       <ContactFooter />
     </main>
