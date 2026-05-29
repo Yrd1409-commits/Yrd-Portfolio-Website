@@ -587,7 +587,7 @@ function JohnClarkAudiCaseStudyPage() {
   return (
     <main className="min-h-screen overflow-x-hidden bg-black px-4 py-4 sm:px-6 md:py-6" style={{ color: PRIMARY_TEXT }}>
       <div className="mx-auto max-w-6xl">
-        <nav className="mb-4 flex items-center justify-between rounded-2xl bg-[#101010] px-4 py-3 text-[10px] uppercase tracking-[0.18em] text-primary/70 sm:text-xs">
+        <nav className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-[#101010] px-4 py-3 text-[10px] uppercase tracking-[0.18em] text-primary/70 sm:text-xs">
           <a href="/#work" className="transition-colors hover:text-primary">
             Back to work
           </a>
@@ -600,7 +600,7 @@ function JohnClarkAudiCaseStudyPage() {
           </a>
         </nav>
 
-        <div className="grid gap-4 lg:grid-cols-[0.98fr_1.02fr]">
+        <div className="grid min-w-0 grid-cols-1 gap-4 lg:grid-cols-[0.98fr_1.02fr]">
           <div className="rounded-2xl border border-white/[0.06] bg-[#101010] p-6 sm:p-8 lg:p-10">
             <p className="text-[10px] uppercase tracking-[0.22em] text-primary sm:text-xs">
               Marketing Project
@@ -643,11 +643,11 @@ function JohnClarkAudiCaseStudyPage() {
             </div>
           </div>
 
-          <div className="overflow-hidden rounded-2xl border border-white/[0.06] bg-[#212121]">
+          <div className="min-w-0 overflow-hidden rounded-2xl border border-white/[0.06] bg-[#f7f4ea]">
             <img
               src="/projects/john-clark-audi-google-ads.svg"
               alt=""
-              className="w-full object-contain"
+              className="block aspect-video h-auto max-h-[520px] w-full object-contain"
             />
           </div>
         </div>
