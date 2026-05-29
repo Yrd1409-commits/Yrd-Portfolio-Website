@@ -196,8 +196,8 @@ function NavLink({ href, children }: { href: string; children: string }) {
 
 function Hero() {
   return (
-    <section className="relative min-h-[100dvh] bg-black p-4 md:p-6">
-      <div className="relative min-h-[calc(100dvh-2rem)] overflow-hidden rounded-2xl bg-black md:min-h-[calc(100dvh-3rem)] md:rounded-[2rem]">
+    <section className="relative bg-black px-3 pb-0 pt-3 md:min-h-[100dvh] md:p-6">
+      <div className="relative min-h-[72dvh] overflow-hidden rounded-2xl bg-black sm:min-h-[78dvh] md:min-h-[calc(100dvh-3rem)] md:rounded-[2rem]">
         <div className="ambient-gradient absolute inset-0 opacity-60" aria-hidden="true" />
         <HeroScene />
         <div
@@ -217,7 +217,7 @@ function Hero() {
           </div>
         </nav>
 
-        <div className="absolute bottom-[clamp(12rem,38dvh,20rem)] left-0 right-0 p-4 sm:bottom-[clamp(7rem,20dvh,10rem)] sm:p-6 md:bottom-0 md:p-8 lg:p-10">
+        <div className="absolute bottom-[clamp(3rem,8dvh,4.5rem)] left-0 right-0 p-4 sm:bottom-[clamp(4rem,10dvh,6rem)] sm:p-6 md:bottom-0 md:p-8 lg:p-10">
           <div className="grid min-w-0 items-end gap-4 sm:gap-5 lg:grid-cols-12 lg:gap-8">
             <h1
               className="min-w-0 lg:col-span-7 xl:col-span-8"
