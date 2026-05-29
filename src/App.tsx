@@ -280,14 +280,14 @@ function Hero() {
 
               <motion.a
                 href="#work"
-                className="group mt-5 hidden w-fit items-center gap-3 rounded-full bg-primary px-5 py-3 text-sm font-medium text-black transition-colors hover:bg-primary/90 active:scale-[0.98] md:inline-flex"
+                className="group mt-5 inline-flex w-fit items-center gap-2 rounded-full bg-primary py-2 pl-4 pr-2 text-xs font-medium text-black transition-colors hover:bg-primary/90 active:scale-[0.98] sm:gap-3 sm:py-3 sm:pl-5 sm:pr-3 sm:text-sm"
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.65, ease: EASE_OUT }}
               >
                 <span>See the work</span>
-                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-black text-primary transition-transform duration-300 group-hover:translate-x-0.5">
-                  <ArrowRight className="h-4 w-4" strokeWidth={1.8} />
+                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-black text-primary transition-transform duration-300 group-hover:translate-x-0.5 sm:h-8 sm:w-8">
+                  <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" strokeWidth={1.8} />
                 </span>
               </motion.a>
             </div>
