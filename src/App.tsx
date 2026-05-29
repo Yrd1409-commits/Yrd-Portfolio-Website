@@ -217,8 +217,8 @@ function Hero() {
           </div>
         </nav>
 
-        <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-8 lg:p-10">
-          <div className="grid min-w-0 items-end gap-5 lg:grid-cols-12 lg:gap-8">
+        <div className="absolute bottom-[clamp(12rem,38dvh,20rem)] left-0 right-0 p-4 sm:bottom-[clamp(7rem,20dvh,10rem)] sm:p-6 md:bottom-0 md:p-8 lg:p-10">
+          <div className="grid min-w-0 items-end gap-4 sm:gap-5 lg:grid-cols-12 lg:gap-8">
             <h1
               className="min-w-0 lg:col-span-7 xl:col-span-8"
               aria-label="Yash Raj"
@@ -231,7 +231,7 @@ function Hero() {
               />
             </h1>
 
-            <div className="max-w-sm pb-2 md:pb-4 lg:col-span-5 lg:ml-auto xl:col-span-4">
+            <div className="max-w-[20rem] pb-0 sm:max-w-sm md:pb-4 lg:col-span-5 lg:ml-auto xl:col-span-4">
               <motion.p
                 className="text-xs leading-[1.2] text-primary/70 sm:text-sm md:text-base"
                 initial={{ y: 20, opacity: 0 }}
@@ -245,7 +245,7 @@ function Hero() {
 
               <motion.a
                 href="#work"
-                className="group mt-5 inline-flex items-center gap-2 rounded-full bg-primary py-2 pl-5 pr-2 text-sm font-medium text-black transition-[gap,transform] duration-300 hover:gap-3 active:scale-[0.98] sm:text-base"
+                className="group mt-4 inline-flex items-center gap-2 rounded-full bg-primary py-2 pl-5 pr-2 text-sm font-medium text-black transition-[gap,transform] duration-300 hover:gap-3 active:scale-[0.98] sm:mt-5 sm:text-base"
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.7, ease: EASE_OUT }}
