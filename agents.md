@@ -18,6 +18,8 @@ Use `npm.cmd` on Windows because PowerShell may block `npm.ps1`.
 - Project data: `src/data/projects.ts`
 - Learning/status data: `src/data/learning.ts`
 - Hero 3D background: `src/components/HeroScene.tsx`
+- Static public assets: `public/projects/`
+- Vercel SPA routing config: `vercel.json`
 - HTML shell and Google Fonts: `index.html`
 - Tailwind config: `tailwind.config.js`
 
@@ -33,6 +35,18 @@ Use `npm.cmd` on Windows because PowerShell may block `npm.ps1`.
   - `Marketing Project`
   - `Automation`
   - `Web App / Website`
+- Project cards can link to dedicated work pages using `links.caseStudy`, such as `/work/john-clark-audi-google-ads`.
+- Dedicated case-study pages should stay part of the React app, not separate static HTML pages.
+- If adding a public workbook, image, or downloadable file, place it in `public/projects/` and link with an absolute public path such as `/projects/file-name.ods`.
+
+## Current Project Pages
+
+- John Clark Audi Google Ads account build:
+  - Card data: `src/data/projects.ts`
+  - Route: `/work/john-clark-audi-google-ads`
+  - Thumbnail: `public/projects/john-clark-audi-google-ads.svg`
+  - Workbook download: `public/projects/john-clark-audi-google-ads-workbook.ods`
+  - Workbook tabs verified: `Campaign_Settings`, `Ad_Groups`, `Keywords`, `Negative_Keywords`, `Responsive_Search_Ads`, `RSAs_-_Additional`, `Sitelinks`, `Callouts_&_Snippets`
 
 ## Design Notes
 
@@ -48,6 +62,10 @@ Use `npm.cmd` on Windows because PowerShell may block `npm.ps1`.
 - Use Lucide icons for interface icons.
 - Avoid emoji in UI copy.
 - Keep text readable on mobile and avoid horizontal overflow.
+- Treat responsive behavior as mandatory for every visual change.
+- On mobile, case-study pages should stack content in one column: text first, image/media below, then supporting sections.
+- Images and SVG thumbnails must not crop awkwardly on mobile unless that crop is intentional. Prefer `object-contain` and stable aspect ratios for project mockups with text inside them.
+- Check that buttons wrap cleanly on narrow screens and do not force horizontal scrolling.
 
 ## Motion Notes
 
@@ -71,7 +89,20 @@ Then visually check:
 - Nav does not overflow on mobile.
 - Work filters still show correct counts.
 - Project cards stay centered when only one filter result is visible.
+- Project links open the intended page or section.
+- Dedicated case-study pages work on desktop and mobile.
+- Mobile pages have no horizontal scrolling.
+- Project images/media collapse cleanly and stay readable on mobile.
 - 3D background is visible but does not overpower text.
+
+For responsive checks, test at least one mobile viewport around `390x844` and one desktop viewport before pushing.
+
+## Deployment Notes
+
+- Repository is connected to GitHub and deployed on Vercel.
+- Pushing `master` to GitHub triggers a Vercel redeploy.
+- `vercel.json` rewrites all routes to `index.html` so direct URLs like `/work/john-clark-audi-google-ads` work on refresh and when shared.
+- Custom domain setup has been started for `yashrajdhillor.com`; Vercel handles hosting and SSL.
 
 ## Known Launch Tasks
 
@@ -79,4 +110,3 @@ Then visually check:
 - Replace placeholder email with the real email.
 - Add real project screenshots or videos.
 - Tune personal copy once final positioning is clear.
-- Deploy to Vercel and connect the custom domain.
