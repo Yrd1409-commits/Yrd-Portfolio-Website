@@ -47,6 +47,18 @@ Use `npm.cmd` on Windows because PowerShell may block `npm.ps1`.
   - Thumbnail: `public/projects/john-clark-audi-google-ads.svg`
   - Workbook download: `public/projects/john-clark-audi-google-ads-workbook.ods`
   - Workbook tabs verified: `Campaign_Settings`, `Ad_Groups`, `Keywords`, `Negative_Keywords`, `Responsive_Search_Ads`, `RSAs_-_Additional`, `Sitelinks`, `Callouts_&_Snippets`
+- AlignGrowth booking recovery MVP:
+  - Card data: `src/data/projects.ts`
+  - Route: `/work/aligngrowth-booking-recovery`
+  - Thumbnail: `public/projects/aligngrowth-flow-new-booking.png`
+  - Supporting workflow images:
+    - `public/projects/aligngrowth-flow-new-booking.png`
+    - `public/projects/aligngrowth-flow-missed-call.png`
+    - `public/projects/aligngrowth-flow-cancellation.png`
+    - `public/projects/aligngrowth-flow-reschedule.png`
+  - The workflow images are sanitized public screenshots. Keep webhook URLs and sample payload values hidden before adding or replacing any n8n screenshots.
+  - This is positioned as an MVP/proof-of-concept for aesthetics clinics and service businesses, not as a finished client deployment.
+  - Mobile workflow screenshots should use an internal horizontal scroll container so the page itself does not horizontally overflow.
 
 ## Design Notes
 

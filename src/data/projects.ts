@@ -32,7 +32,7 @@ export const projects: Project[] = [
     status: 'Case study',
     description: 'n8n proof-of-concept for recovering bookings, missed calls and cancellations.',
     tags: ['n8n', 'Webhooks', 'Google Sheets', 'Lead Recovery'],
-    media: { type: 'image', src: '/projects/aligngrowth-booking-recovery.png', fit: 'contain' },
+    media: { type: 'image', src: '/projects/aligngrowth-flow-new-booking.png' },
     links: { caseStudy: '/work/aligngrowth-booking-recovery' },
     date: '2026-05',
   },

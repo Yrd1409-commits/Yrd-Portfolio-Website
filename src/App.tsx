@@ -754,11 +754,46 @@ function JohnClarkAudiCaseStudyPage() {
 }
 
 function AlignGrowthBookingRecoveryCaseStudyPage() {
-  const flowItems = [
-    'New booking intake captures service, preferred date and time, checks required fields, creates a test appointment path and logs the result.',
-    'Missed call recovery captures caller details, creates a follow-up SMS path and records the recovery attempt in Google Sheets.',
-    'Cancellation recovery finds the appointment, updates status, sends the cancellation path and logs success or not-found outcomes.',
-    'Reschedule recovery finds the original appointment, updates the new date and time, sends a reschedule path and records the result.',
+  const stats = [
+    { label: 'Event paths', value: '4', body: 'Bookings, missed calls, cancellations and reschedules.' },
+    { label: 'n8n nodes', value: '72', body: 'Validation, branching, logging and response handling.' },
+    { label: 'Data layer', value: 'Sheets', body: 'Appointment, follow-up and recovery report tabs.' },
+    { label: 'Next hooks', value: 'SMS', body: 'Ready for Twilio, voice, calendar or clinic CRM logic.' },
+  ];
+
+  const workflowPanels = [
+    {
+      eyebrow: 'Flow 01',
+      title: 'New booking intake',
+      image: '/projects/aligngrowth-flow-new-booking.png',
+      accent: '#A8B89C',
+      body: 'Captures a new booking request, checks the event type, validates required details and separates complete requests from missing-field cases.',
+      points: ['Webhook intake', 'Required-field check', 'Appointment and recovery logging'],
+    },
+    {
+      eyebrow: 'Flow 02',
+      title: 'Missed call recovery',
+      image: '/projects/aligngrowth-flow-missed-call.png',
+      accent: '#C08A4A',
+      body: 'Turns a missed call into a follow-up path by capturing caller details, creating a placeholder SMS step and recording the recovery attempt.',
+      points: ['Caller capture', 'Follow-up SMS placeholder', 'Recovery report row'],
+    },
+    {
+      eyebrow: 'Flow 03',
+      title: 'Cancellation handling',
+      image: '/projects/aligngrowth-flow-cancellation.png',
+      accent: '#8EA7D8',
+      body: 'Finds the matching appointment, updates the booking status, logs the cancellation and sends the correct response for found or not-found cases.',
+      points: ['Appointment lookup', 'Status update branch', 'Cancellation recovery log'],
+    },
+    {
+      eyebrow: 'Flow 04',
+      title: 'Reschedule handling',
+      image: '/projects/aligngrowth-flow-reschedule.png',
+      accent: '#A8B89C',
+      body: 'Finds the original booking, updates the new preferred date and time, then logs the reschedule result for the clinic team.',
+      points: ['Original booking lookup', 'New time update', 'Reschedule success or not-found path'],
+    },
   ];
 
   const buildItems = [
@@ -770,111 +805,154 @@ function AlignGrowthBookingRecoveryCaseStudyPage() {
     'Disabled Calendar, Cal.com and Twilio nodes kept in the workflow as integration points for a real client setup.',
   ];
 
-  const proofCards = [
-    {
-      title: '4 recovery journeys',
-      body: 'New bookings, missed calls, cancellations and reschedules are handled as separate but connected flows.',
-    },
-    {
-      title: '72 n8n nodes',
-      body: 'The proof-of-concept covers intake, validation, branching, status updates, logging and response handling.',
-    },
-    {
-      title: 'Configurable by clinic',
-      body: 'Calendar, voice, SMS and extra service hooks can be attached based on each business requirement.',
-    },
-  ];
-
   return (
     <main className="min-h-screen overflow-x-hidden bg-black px-4 py-4 sm:px-6 md:py-6" style={{ color: PRIMARY_TEXT }}>
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-[88rem]">
         <nav className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-[#101010] px-4 py-3 text-[10px] uppercase tracking-[0.18em] text-primary/70 sm:text-xs">
           <a href="/#work" className="transition-colors hover:text-primary">
             Back to work
           </a>
-          <span>Automation MVP</span>
+          <span>Automation case study</span>
         </nav>
 
-        <div className="grid min-w-0 grid-cols-1 gap-4 lg:grid-cols-[0.96fr_1.04fr]">
-          <div className="rounded-2xl border border-white/[0.06] bg-[#101010] p-6 sm:p-8 lg:p-10">
-            <p className="text-[10px] uppercase tracking-[0.22em] text-primary sm:text-xs">
-              Automation
-            </p>
-            <h1 className="mt-5 max-w-2xl text-4xl font-medium leading-[0.92] tracking-[-0.04em] text-[#E1E0CC] sm:text-5xl md:text-6xl lg:text-7xl">
-              AlignGrowth booking recovery MVP
-            </h1>
-            <p className="mt-6 max-w-xl text-sm leading-relaxed text-primary/75 sm:text-base">
-              A proof-of-concept n8n system for aesthetics clinics that captures booking,
-              missed call, cancellation and reschedule events, then routes each one into a
-              recovery flow with logging and follow-up placeholders.
-            </p>
-            <div className="mt-7 flex flex-wrap gap-2">
-              {['n8n', 'Webhooks', 'Google Sheets', 'Lead Recovery', 'Aesthetics Clinics'].map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-full border border-white/10 px-3 py-1 text-[10px] text-gray-500"
-                >
-                  {tag}
-                </span>
-              ))}
+        <section className="overflow-hidden rounded-[1.75rem] border border-white/[0.06] bg-[#101010]">
+          <div className="grid gap-0 lg:grid-cols-[0.86fr_1.14fr]">
+            <div className="flex flex-col justify-between p-6 sm:p-8 lg:p-10">
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.24em] text-primary sm:text-xs">
+                  Automation MVP
+                </p>
+                <h1 className="mt-5 max-w-2xl text-4xl font-medium leading-[0.95] tracking-[-0.04em] text-[#E1E0CC] sm:text-5xl lg:text-6xl">
+                  AlignGrowth booking recovery MVP
+                </h1>
+                <p className="mt-6 max-w-xl text-sm leading-relaxed text-primary/75 sm:text-base">
+                  A proof-of-concept n8n system for aesthetics clinics that captures booking,
+                  missed call, cancellation and reschedule events, then routes each one into a
+                  recovery flow with logging and follow-up placeholders.
+                </p>
+                <p className="mt-4 max-w-xl text-sm leading-relaxed text-gray-500">
+                  The current version uses test payloads and fake messaging nodes. In a real setup,
+                  the same structure can connect to voice, calendar, SMS or clinic CRM tools based
+                  on the business requirement.
+                </p>
+              </div>
+
+              <div className="mt-8 flex flex-wrap gap-2">
+                {['n8n', 'Webhooks', 'Google Sheets', 'Lead Recovery', 'Aesthetics Clinics'].map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full border border-white/10 px-3 py-1 text-[10px] text-primary/60"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
             </div>
-            <div className="mt-8">
-              <a
-                href="/#work"
-                className="group inline-flex items-center gap-2 rounded-full bg-primary py-2 pl-5 pr-2 text-sm font-medium text-black transition-[gap,transform] duration-300 hover:gap-3 active:scale-[0.98]"
-              >
-                Back to work
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-black transition-transform duration-300 group-hover:scale-110">
-                  <ArrowRight className="h-4 w-4 text-primary" strokeWidth={1.8} />
-                </span>
-              </a>
+
+            <div className="border-t border-white/[0.06] bg-[#171717] p-4 lg:border-l lg:border-t-0 lg:p-5">
+              <div className="overflow-hidden rounded-2xl border border-white/[0.06] bg-[#202020]">
+                <img
+                  src="/projects/aligngrowth-flow-new-booking.png"
+                  alt=""
+                  className="block aspect-[16/9] h-auto w-full object-cover object-center"
+                />
+              </div>
+              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                {stats.map((stat) => (
+                  <div key={stat.label} className="rounded-2xl border border-white/[0.06] bg-black/20 p-4">
+                    <p className="text-[10px] uppercase tracking-[0.2em] text-gray-500">{stat.label}</p>
+                    <p className="mt-2 text-xl font-medium text-[#E1E0CC]">{stat.value}</p>
+                    <p className="mt-2 text-xs leading-relaxed text-gray-500">{stat.body}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
+        </section>
 
-          <div className="min-w-0 overflow-hidden rounded-2xl border border-white/[0.06] bg-[#171717] p-3">
-            <img
-              src="/projects/aligngrowth-booking-recovery.png"
-              alt=""
-              className="block aspect-video h-auto max-h-[520px] w-full object-contain"
-            />
-          </div>
-        </div>
-
-        <div className="mt-4 grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
+        <section className="mt-4 grid gap-4 lg:grid-cols-[0.72fr_1.28fr]">
           <div className="rounded-2xl border border-white/[0.06] bg-[#101010] p-6 sm:p-8">
             <p className="text-[10px] uppercase tracking-[0.22em] text-primary sm:text-xs">
               The idea
             </p>
-            <h3 className="mt-4 text-2xl font-medium leading-tight text-[#E1E0CC] sm:text-3xl">
-              Recover the leads that normally leak out.
-            </h3>
-            <p className="mt-4 text-sm leading-relaxed text-gray-400">
-              This MVP is built for aesthetics clinics, but the pattern can work for other
-              appointment-led service businesses too: capture the event, decide what happened,
-              log it, and trigger the right follow-up path before the enquiry goes cold.
-            </p>
-            <p className="mt-4 text-sm leading-relaxed text-gray-400">
-              The current version uses test payloads and fake messaging nodes, so it demonstrates
-              the system design without claiming a finished production deployment.
-            </p>
+            <h2 className="mt-4 text-2xl font-medium leading-tight text-[#E1E0CC] sm:text-3xl">
+              Recover the leads that usually leak out.
+            </h2>
           </div>
-
           <div className="rounded-2xl border border-white/[0.06] bg-[#101010] p-6 sm:p-8">
-            <p className="text-[10px] uppercase tracking-[0.22em] text-primary sm:text-xs">
-              The flows
+            <p className="max-w-3xl text-sm leading-relaxed text-gray-400 sm:text-base">
+              This MVP is built around a simple service-business problem: a person books,
+              misses a call, cancels or asks to reschedule, and the clinic needs the next step
+              logged before the enquiry goes cold. The workflow turns those events into
+              structured recovery paths rather than leaving them as scattered admin tasks.
             </p>
-            <ul className="mt-5 space-y-3">
-              {flowItems.map((item) => (
-                <li key={item} className="flex gap-3 text-sm leading-relaxed text-gray-400">
-                  <Check className="mt-0.5 h-4 w-4 flex-none text-primary" strokeWidth={1.8} />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
           </div>
-        </div>
+        </section>
 
-        <div className="mt-4 rounded-2xl border border-white/[0.06] bg-[#101010] p-6 sm:p-8">
+        <section className="mt-10">
+          <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-[10px] uppercase tracking-[0.22em] text-primary sm:text-xs">
+                Workflow gallery
+              </p>
+              <h2 className="mt-3 text-3xl font-medium leading-tight tracking-[-0.03em] text-[#E1E0CC] sm:text-4xl">
+                Four separate recovery flows.
+              </h2>
+            </div>
+            <p className="max-w-md text-sm leading-relaxed text-gray-500">
+              Each screenshot keeps the n8n architecture visible while hiding test payload and
+              webhook details.
+            </p>
+          </div>
+
+          <div className="grid gap-4">
+            {workflowPanels.map((panel, index) => (
+              <motion.article
+                key={panel.title}
+                initial={{ y: 20, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ duration: 0.55, delay: index * 0.06, ease: EASE_OUT }}
+                className="grid min-w-0 overflow-hidden rounded-[1.5rem] border border-white/[0.06] bg-[#101010] lg:grid-cols-[0.72fr_1.28fr]"
+              >
+                <div className="flex flex-col justify-between gap-8 p-6 sm:p-8">
+                  <div>
+                    <p className="text-[10px] uppercase tracking-[0.22em]" style={{ color: panel.accent }}>
+                      {panel.eyebrow}
+                    </p>
+                    <h3 className="mt-4 text-2xl font-medium leading-tight text-[#E1E0CC] sm:text-3xl">
+                      {panel.title}
+                    </h3>
+                    <p className="mt-4 text-sm leading-relaxed text-gray-400">
+                      {panel.body}
+                    </p>
+                  </div>
+
+                  <ul className="space-y-3">
+                    {panel.points.map((point) => (
+                      <li key={point} className="flex gap-3 text-sm leading-relaxed text-gray-400">
+                        <Check className="mt-0.5 h-4 w-4 flex-none text-primary" strokeWidth={1.8} />
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="min-w-0 border-t border-white/[0.06] bg-[#171717] p-3 sm:p-4 lg:border-l lg:border-t-0">
+                  <div className="overflow-x-auto rounded-2xl border border-white/[0.06] bg-[#202020]">
+                    <img
+                      src={panel.image}
+                      alt=""
+                      className="block h-auto w-[760px] max-w-none md:w-full"
+                    />
+                  </div>
+                </div>
+              </motion.article>
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-4 rounded-2xl border border-white/[0.06] bg-[#101010] p-6 sm:p-8">
           <p className="text-[10px] uppercase tracking-[0.22em] text-primary sm:text-xs">
             The build
           </p>
@@ -886,16 +964,29 @@ function AlignGrowthBookingRecoveryCaseStudyPage() {
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
-        <div className="mt-4 grid gap-4 md:grid-cols-3">
-          {proofCards.map((card) => (
-            <div key={card.title} className="rounded-2xl border border-white/[0.06] bg-[#212121] p-5">
-              <span className="text-sm font-medium text-[#E1E0CC]">{card.title}</span>
-              <p className="mt-3 text-sm leading-relaxed text-gray-500">{card.body}</p>
-            </div>
-          ))}
-        </div>
+        <section className="mt-4 rounded-2xl border border-white/[0.06] bg-[#101010] p-6 sm:p-8">
+          <p className="text-[10px] uppercase tracking-[0.22em] text-primary sm:text-xs">
+            The honest close
+          </p>
+          <p className="mt-4 max-w-4xl text-sm leading-relaxed text-gray-400 sm:text-base">
+            This is a working proof-of-concept, not a finished client deployment. The value is in
+            the structure: event capture, validation, branching, logging and clear places to attach
+            production tools once a real clinic has chosen its calendar, voice and messaging stack.
+          </p>
+          <div className="mt-7">
+            <a
+              href="/#work"
+              className="group inline-flex items-center gap-2 rounded-full bg-primary py-2 pl-5 pr-2 text-sm font-medium text-black transition-[gap,transform] duration-300 hover:gap-3 active:scale-[0.98]"
+            >
+              Back to work
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-black transition-transform duration-300 group-hover:scale-110">
+                <ArrowRight className="h-4 w-4 text-primary" strokeWidth={1.8} />
+              </span>
+            </a>
+          </div>
+        </section>
       </div>
     </main>
   );
