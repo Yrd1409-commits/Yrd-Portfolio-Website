@@ -1114,7 +1114,7 @@ function ContactFooter() {
       </h2>
 
       <a
-        href="mailto:hello@yashr.co"
+        href="mailto:yashrajdhillor@gmail.com"
         className="group mx-auto mt-8 inline-flex items-center gap-2 rounded-full bg-primary py-2 pl-5 pr-2 text-sm font-medium text-black transition-[gap,transform] duration-300 hover:gap-3 active:scale-[0.98] sm:text-base"
       >
         Get in touch
