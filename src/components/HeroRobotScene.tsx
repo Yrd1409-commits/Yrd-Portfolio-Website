@@ -6,10 +6,22 @@ interface HeroRobotSceneProps {
 }
 
 const cream = new THREE.Color('#DEDBC8');
-const sage = new THREE.Color('#A8B89C');
-const graphite = new THREE.Color('#050505');
+const softSage = new THREE.Color('#A8B89C');
+const warmBlack = new THREE.Color('#050505');
 
 const lerp = (current: number, target: number, amount: number) => current + (target - current) * amount;
+
+function makeNode(position: THREE.Vector3, scale = 1) {
+  const geometry = new THREE.SphereGeometry(0.035 * scale, 12, 10);
+  const material = new THREE.MeshBasicMaterial({
+    color: cream,
+    transparent: true,
+    opacity: 0.72,
+  });
+  const node = new THREE.Mesh(geometry, material);
+  node.position.copy(position);
+  return node;
+}
 
 export function HeroRobotScene({ stageRef }: HeroRobotSceneProps) {
   const mountRef = useRef<HTMLDivElement | null>(null);
@@ -23,8 +35,8 @@ export function HeroRobotScene({ stageRef }: HeroRobotSceneProps) {
     }
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100);
-    camera.position.set(0, 0.2, 6.6);
+    const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
+    camera.position.set(0, 0.1, 6.5);
 
     const renderer = new THREE.WebGLRenderer({
       alpha: true,
@@ -35,144 +47,196 @@ export function HeroRobotScene({ stageRef }: HeroRobotSceneProps) {
     renderer.setClearColor(0x000000, 0);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.02;
+    renderer.toneMappingExposure = 1.08;
     renderer.domElement.className = 'hero-robot-canvas';
     mount.appendChild(renderer.domElement);
 
-    const robot = new THREE.Group();
-    const headPivot = new THREE.Group();
-    const neckPivot = new THREE.Group();
-    const shoulders = new THREE.Group();
-    scene.add(robot);
+    const rig = new THREE.Group();
+    const core = new THREE.Group();
+    const halo = new THREE.Group();
+    const neuralField = new THREE.Group();
+    scene.add(rig);
+    rig.add(core, halo, neuralField);
 
     const shellMaterial = new THREE.MeshPhysicalMaterial({
-      color: graphite,
-      metalness: 0.68,
-      roughness: 0.2,
+      color: warmBlack,
+      metalness: 0.76,
+      roughness: 0.14,
       clearcoat: 1,
-      clearcoatRoughness: 0.08,
+      clearcoatRoughness: 0.05,
     });
 
-    const softBlackMaterial = new THREE.MeshPhysicalMaterial({
-      color: new THREE.Color('#11110f'),
-      metalness: 0.36,
-      roughness: 0.34,
-      clearcoat: 0.75,
-      clearcoatRoughness: 0.16,
+    const glassMaterial = new THREE.MeshPhysicalMaterial({
+      color: new THREE.Color('#171914'),
+      metalness: 0.18,
+      roughness: 0.05,
+      clearcoat: 1,
+      clearcoatRoughness: 0.04,
+      transparent: true,
+      opacity: 0.54,
+      transmission: 0.18,
     });
 
-    const highlightMaterial = new THREE.MeshBasicMaterial({
+    const creamLineMaterial = new THREE.LineBasicMaterial({
+      color: cream,
+      transparent: true,
+      opacity: 0.34,
+    });
+
+    const sageLineMaterial = new THREE.LineBasicMaterial({
+      color: softSage,
+      transparent: true,
+      opacity: 0.24,
+    });
+
+    const glintMaterial = new THREE.MeshBasicMaterial({
       color: cream,
       transparent: true,
       opacity: 0.72,
+      depthWrite: false,
     });
 
-    const sageGlowMaterial = new THREE.MeshBasicMaterial({
-      color: sage,
+    const auraMaterial = new THREE.MeshBasicMaterial({
+      color: softSage,
       transparent: true,
-      opacity: 0.2,
+      opacity: 0.09,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
     });
 
-    const headGeometry = new THREE.SphereGeometry(1, 48, 48);
-    const torsoGeometry = new THREE.SphereGeometry(1, 48, 32);
-    const neckGeometry = new THREE.CylinderGeometry(0.28, 0.38, 0.9, 40);
-    const ringGeometry = new THREE.TorusGeometry(0.33, 0.018, 12, 48);
-    const highlightGeometry = new THREE.SphereGeometry(1, 24, 16);
-    const visorGeometry = new THREE.SphereGeometry(1, 32, 16);
-    const earGeometry = new THREE.CylinderGeometry(0.2, 0.2, 0.08, 32);
+    const coreGeometry = new THREE.SphereGeometry(1, 56, 56);
+    const coreShell = new THREE.Mesh(coreGeometry, shellMaterial);
+    coreShell.scale.set(0.86, 1.12, 0.7);
+    coreShell.rotation.z = -0.04;
+    core.add(coreShell);
 
-    const torso = new THREE.Mesh(torsoGeometry, shellMaterial);
-    torso.scale.set(1.65, 1.05, 0.56);
-    torso.position.set(0, -1.5, 0);
-    torso.rotation.x = -0.05;
-    robot.add(torso);
+    const glassVeil = new THREE.Mesh(coreGeometry, glassMaterial);
+    glassVeil.scale.set(0.92, 1.18, 0.74);
+    glassVeil.rotation.z = -0.04;
+    core.add(glassVeil);
 
-    const collar = new THREE.Mesh(new THREE.TorusGeometry(0.58, 0.045, 16, 64), softBlackMaterial);
-    collar.position.set(0, -0.54, 0.02);
-    collar.rotation.x = Math.PI / 2;
-    robot.add(collar);
+    const innerLens = new THREE.Mesh(new THREE.SphereGeometry(0.58, 36, 28), auraMaterial);
+    innerLens.scale.set(0.72, 1.24, 0.08);
+    innerLens.position.set(-0.08, 0.03, 0.66);
+    innerLens.rotation.z = -0.18;
+    core.add(innerLens);
 
-    neckPivot.position.set(0, -0.1, 0);
-    robot.add(neckPivot);
+    const longGlint = new THREE.Mesh(new THREE.SphereGeometry(0.2, 24, 14), glintMaterial);
+    longGlint.scale.set(0.18, 1.22, 0.035);
+    longGlint.position.set(-0.32, 0.1, 0.72);
+    longGlint.rotation.z = -0.22;
+    core.add(longGlint);
 
-    const neck = new THREE.Mesh(neckGeometry, softBlackMaterial);
-    neck.position.set(0, -0.48, 0);
-    neckPivot.add(neck);
+    const cheekGlint = new THREE.Mesh(new THREE.SphereGeometry(0.16, 18, 12), glintMaterial.clone());
+    (cheekGlint.material as THREE.MeshBasicMaterial).opacity = 0.5;
+    cheekGlint.scale.set(0.24, 0.5, 0.025);
+    cheekGlint.position.set(0.34, 0.58, 0.7);
+    cheekGlint.rotation.z = 0.36;
+    core.add(cheekGlint);
 
-    for (let index = 0; index < 3; index += 1) {
-      const ringMaterial = highlightMaterial.clone();
-      ringMaterial.opacity = 0.16 - index * 0.025;
-      const ring = new THREE.Mesh(ringGeometry, ringMaterial);
-      ring.position.set(0, -0.72 + index * 0.18, 0.01);
-      ring.rotation.x = Math.PI / 2;
-      ring.scale.setScalar(0.86 + index * 0.05);
-      neckPivot.add(ring);
-    }
+    const pulseGlint = new THREE.Mesh(new THREE.SphereGeometry(0.055, 16, 10), glintMaterial.clone());
+    (pulseGlint.material as THREE.MeshBasicMaterial).opacity = 0.92;
+    pulseGlint.position.set(0.03, 0.0, 0.76);
+    core.add(pulseGlint);
 
-    headPivot.position.set(0, 0.35, 0);
-    robot.add(headPivot);
+    const ringMaterialA = new THREE.MeshBasicMaterial({
+      color: cream,
+      transparent: true,
+      opacity: 0.28,
+      depthWrite: false,
+    });
 
-    const head = new THREE.Mesh(headGeometry, shellMaterial);
-    head.scale.set(0.78, 1.05, 0.64);
-    head.position.set(0, 0.3, 0);
-    headPivot.add(head);
+    const ringMaterialB = new THREE.MeshBasicMaterial({
+      color: softSage,
+      transparent: true,
+      opacity: 0.22,
+      depthWrite: false,
+    });
 
-    const visor = new THREE.Mesh(visorGeometry, sageGlowMaterial);
-    visor.scale.set(0.38, 0.68, 0.035);
-    visor.position.set(-0.18, 0.38, 0.62);
-    visor.rotation.z = -0.12;
-    headPivot.add(visor);
+    const ringA = new THREE.Mesh(new THREE.TorusGeometry(1.22, 0.006, 10, 128), ringMaterialA);
+    ringA.rotation.set(1.35, 0.38, -0.22);
+    halo.add(ringA);
 
-    const highGlint = new THREE.Mesh(highlightGeometry, highlightMaterial);
-    highGlint.scale.set(0.12, 0.26, 0.018);
-    highGlint.position.set(0.23, 0.82, 0.62);
-    highGlint.rotation.z = -0.35;
-    headPivot.add(highGlint);
+    const ringB = new THREE.Mesh(new THREE.TorusGeometry(1.02, 0.006, 10, 128), ringMaterialB);
+    ringB.rotation.set(1.12, -0.48, 0.36);
+    halo.add(ringB);
 
-    const faceGlint = new THREE.Mesh(highlightGeometry, highlightMaterial.clone());
-    faceGlint.scale.set(0.06, 0.42, 0.014);
-    faceGlint.position.set(-0.26, 0.26, 0.64);
-    faceGlint.rotation.z = -0.18;
-    (faceGlint.material as THREE.MeshBasicMaterial).opacity = 0.46;
-    headPivot.add(faceGlint);
+    const ringC = new THREE.Mesh(new THREE.TorusGeometry(1.42, 0.004, 8, 128), ringMaterialA.clone());
+    (ringC.material as THREE.MeshBasicMaterial).opacity = 0.16;
+    ringC.rotation.set(1.68, 0.08, 0.72);
+    halo.add(ringC);
 
-    const leftEar = new THREE.Mesh(earGeometry, softBlackMaterial);
-    leftEar.position.set(-0.78, 0.24, 0.04);
-    leftEar.rotation.z = Math.PI / 2;
-    headPivot.add(leftEar);
+    const spineMaterial = new THREE.MeshPhysicalMaterial({
+      color: new THREE.Color('#090907'),
+      metalness: 0.52,
+      roughness: 0.2,
+      clearcoat: 0.9,
+      clearcoatRoughness: 0.08,
+      transparent: true,
+      opacity: 0.68,
+    });
 
-    const rightEar = leftEar.clone();
-    rightEar.position.x = 0.78;
-    headPivot.add(rightEar);
+    const spine = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.18, 0.98, 36), spineMaterial);
+    spine.position.set(0, -1.28, -0.04);
+    spine.rotation.x = -0.03;
+    rig.add(spine);
 
-    shoulders.position.set(0, -1.08, 0.02);
-    robot.add(shoulders);
+    const baseRing = new THREE.Mesh(new THREE.TorusGeometry(0.42, 0.018, 12, 96), ringMaterialA.clone());
+    (baseRing.material as THREE.MeshBasicMaterial).opacity = 0.18;
+    baseRing.position.set(0, -1.78, 0.02);
+    baseRing.rotation.x = Math.PI / 2;
+    rig.add(baseRing);
 
-    const leftShoulderGlint = new THREE.Mesh(highlightGeometry, highlightMaterial.clone());
-    leftShoulderGlint.scale.set(0.14, 0.055, 0.018);
-    leftShoulderGlint.position.set(-0.84, -0.02, 0.5);
-    (leftShoulderGlint.material as THREE.MeshBasicMaterial).opacity = 0.34;
-    shoulders.add(leftShoulderGlint);
+    const nodePositions = [
+      new THREE.Vector3(-1.52, 0.72, -0.1),
+      new THREE.Vector3(-1.18, -0.22, 0.18),
+      new THREE.Vector3(-0.72, 1.14, 0.02),
+      new THREE.Vector3(0.88, 1.0, -0.04),
+      new THREE.Vector3(1.38, 0.28, 0.12),
+      new THREE.Vector3(1.08, -0.76, 0.04),
+      new THREE.Vector3(-0.58, -1.02, 0.1),
+    ];
 
-    const rightShoulderGlint = leftShoulderGlint.clone();
-    rightShoulderGlint.position.set(0.68, -0.14, 0.5);
-    shoulders.add(rightShoulderGlint);
+    const nodes = nodePositions.map((position, index) => {
+      const node = makeNode(position, index % 3 === 0 ? 1.35 : 1);
+      neuralField.add(node);
+      return node;
+    });
 
-    const ambient = new THREE.HemisphereLight(0xdedbc8, 0x050505, 1.35);
+    const linePairs = [
+      [0, 2],
+      [2, 3],
+      [3, 4],
+      [4, 5],
+      [5, 6],
+      [6, 1],
+      [1, 0],
+      [2, 6],
+      [3, 5],
+    ];
+
+    linePairs.forEach(([from, to], index) => {
+      const geometry = new THREE.BufferGeometry().setFromPoints([nodePositions[from], nodePositions[to]]);
+      const line = new THREE.Line(geometry, index % 2 === 0 ? creamLineMaterial : sageLineMaterial);
+      neuralField.add(line);
+    });
+
+    neuralField.position.set(0.02, 0.04, -0.46);
+    neuralField.scale.setScalar(0.88);
+
+    const ambient = new THREE.HemisphereLight(0xdedbc8, 0x050505, 1.2);
     scene.add(ambient);
 
-    const keyLight = new THREE.DirectionalLight(0xdedbc8, 3.4);
-    keyLight.position.set(-2.4, 2.5, 3.2);
+    const keyLight = new THREE.DirectionalLight(0xdedbc8, 3.8);
+    keyLight.position.set(-2.2, 2.6, 3.1);
     scene.add(keyLight);
 
-    const rimLight = new THREE.DirectionalLight(0xa8b89c, 1.9);
-    rimLight.position.set(2.8, 1.2, 2.7);
+    const rimLight = new THREE.DirectionalLight(0xa8b89c, 2.4);
+    rimLight.position.set(3.1, 1.7, 2.8);
     scene.add(rimLight);
 
-    const cursorLight = new THREE.PointLight(0xdedbc8, 2.3, 6.2);
-    cursorLight.position.set(-0.5, 0.6, 2.8);
+    const cursorLight = new THREE.PointLight(0xdedbc8, 2.4, 6.5);
+    cursorLight.position.set(-0.6, 0.7, 2.8);
     scene.add(cursorLight);
 
     const pointer = {
@@ -192,6 +256,8 @@ export function HeroRobotScene({ stageRef }: HeroRobotSceneProps) {
     let animationFrame = 0;
     let visible = true;
     let mobile = false;
+    let elapsedSeconds = 0;
+    let lastRenderTime = performance.now();
 
     const updateSize = () => {
       const rect = stage.getBoundingClientRect();
@@ -200,13 +266,15 @@ export function HeroRobotScene({ stageRef }: HeroRobotSceneProps) {
       mobile = width < 768;
       const desktop = width >= 1024;
 
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, mobile ? 1.15 : 1.5));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, mobile ? 1.1 : 1.45));
       renderer.setSize(width, height, false);
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
 
-      robot.position.set(desktop ? 1.72 : 0.36, desktop ? -0.16 : 0.18, 0);
-      robot.scale.setScalar(desktop ? 1.18 : 0.82);
+      rig.position.set(desktop ? 1.92 : 0.46, desktop ? 0.0 : 0.38, 0);
+      rig.scale.setScalar(desktop ? 1.34 : 0.92);
+      neuralField.visible = !mobile;
+      halo.visible = !mobile;
     };
 
     const setStageVars = () => {
@@ -253,6 +321,7 @@ export function HeroRobotScene({ stageRef }: HeroRobotSceneProps) {
         visible = entry.isIntersecting;
 
         if (visible) {
+          lastRenderTime = performance.now();
           animationFrame = window.requestAnimationFrame(render);
         }
       },
@@ -260,29 +329,44 @@ export function HeroRobotScene({ stageRef }: HeroRobotSceneProps) {
     );
 
     const render = () => {
+      const now = performance.now();
+      elapsedSeconds += Math.min(0.05, (now - lastRenderTime) / 1000);
+      lastRenderTime = now;
+
       pointer.targetX = pointer.active ? pointer.targetX : 0.5;
       pointer.targetY = pointer.active ? pointer.targetY : 0.42;
-      pointer.x = lerp(pointer.x, pointer.targetX, 0.075 + pointer.speed * 0.045);
-      pointer.y = lerp(pointer.y, pointer.targetY, 0.075 + pointer.speed * 0.035);
+      pointer.x = lerp(pointer.x, pointer.targetX, 0.08 + pointer.speed * 0.05);
+      pointer.y = lerp(pointer.y, pointer.targetY, 0.07 + pointer.speed * 0.04);
       pointer.speed *= 0.88;
 
-      const yaw = (pointer.x - 0.5) * 1.04;
-      const pitch = (0.42 - pointer.y) * 0.36;
+      const yaw = (pointer.x - 0.5) * 0.92;
+      const pitch = (0.42 - pointer.y) * 0.34;
       const micro = pointer.active ? pointer.speed : 0;
+      const breathe = Math.sin(elapsedSeconds * 0.8) * 0.018;
 
-      headPivot.rotation.y = lerp(headPivot.rotation.y, yaw, 0.1 + micro * 0.05);
-      headPivot.rotation.x = lerp(headPivot.rotation.x, pitch, 0.08);
-      headPivot.rotation.z = lerp(headPivot.rotation.z, -yaw * 0.08, 0.08);
-      neckPivot.rotation.y = lerp(neckPivot.rotation.y, yaw * 0.34, 0.08);
-      neckPivot.rotation.x = lerp(neckPivot.rotation.x, pitch * 0.28, 0.08);
-      shoulders.rotation.y = lerp(shoulders.rotation.y, yaw * 0.018, 0.035);
+      core.rotation.y = lerp(core.rotation.y, yaw, 0.11 + micro * 0.05);
+      core.rotation.x = lerp(core.rotation.x, pitch + breathe, 0.08);
+      core.rotation.z = lerp(core.rotation.z, -yaw * 0.07, 0.08);
+      spine.rotation.y = lerp(spine.rotation.y, yaw * 0.16, 0.06);
+      halo.rotation.y = lerp(halo.rotation.y, yaw * 0.5 + elapsedSeconds * 0.04, 0.06);
+      halo.rotation.x = lerp(halo.rotation.x, -pitch * 0.4, 0.06);
+      neuralField.rotation.y = lerp(neuralField.rotation.y, yaw * 0.26, 0.04);
+      neuralField.rotation.x = lerp(neuralField.rotation.x, pitch * 0.16, 0.04);
+
+      ringA.rotation.z += 0.0016;
+      ringB.rotation.z -= 0.0012;
+      ringC.rotation.z += 0.0009;
 
       cursorLight.position.x = lerp(cursorLight.position.x, (pointer.x - 0.5) * 4.2, 0.12);
-      cursorLight.position.y = lerp(cursorLight.position.y, (0.5 - pointer.y) * 2.1 + 0.65, 0.12);
-      cursorLight.intensity = lerp(cursorLight.intensity, pointer.active ? 2.6 + micro * 1.2 : 1.5, 0.08);
-      visor.rotation.z = -0.12 + yaw * 0.12;
-      highGlint.position.x = 0.23 - yaw * 0.18;
-      faceGlint.position.x = -0.26 - yaw * 0.1;
+      cursorLight.position.y = lerp(cursorLight.position.y, (0.5 - pointer.y) * 2.1 + 0.68, 0.12);
+      cursorLight.intensity = lerp(cursorLight.intensity, pointer.active ? 2.8 + micro * 1.4 : 1.55, 0.08);
+
+      longGlint.position.x = -0.32 - yaw * 0.14;
+      cheekGlint.position.x = 0.34 - yaw * 0.2;
+      pulseGlint.scale.setScalar(1 + Math.sin(elapsedSeconds * 2.4) * 0.12 + micro * 0.14);
+      nodes.forEach((node, index) => {
+        node.scale.setScalar(1 + Math.sin(elapsedSeconds * 1.3 + index) * 0.16 + micro * 0.08);
+      });
 
       setStageVars();
       renderer.render(scene, camera);
@@ -306,14 +390,15 @@ export function HeroRobotScene({ stageRef }: HeroRobotSceneProps) {
       window.removeEventListener('pointermove', handlePointerMove);
       stage.removeEventListener('pointerleave', handlePointerLeave);
 
-      robot.traverse((object) => {
-        if (!(object instanceof THREE.Mesh)) {
+      rig.traverse((object) => {
+        if (!(object instanceof THREE.Mesh || object instanceof THREE.Line)) {
           return;
         }
 
         object.geometry.dispose();
-        const materials = Array.isArray(object.material) ? object.material : [object.material];
-        materials.forEach((material) => material.dispose());
+        const material = object.material;
+        const materials = Array.isArray(material) ? material : [material];
+        materials.forEach((item) => item.dispose());
       });
 
       renderer.dispose();
