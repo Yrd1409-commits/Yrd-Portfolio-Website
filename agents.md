@@ -17,7 +17,7 @@ Use `npm.cmd` on Windows because PowerShell may block `npm.ps1`.
 - Global CSS and custom utilities: `src/index.css`
 - Project data: `src/data/projects.ts`
 - Learning/status data: `src/data/learning.ts`
-- Hero robot video background and cursor interaction: `src/App.tsx`
+- Hero 3D robot background and cursor interaction: `src/components/HeroRobotScene.tsx`
 - Legacy hero 3D scene component: `src/components/HeroScene.tsx`
 - Static public assets: `public/projects/`
 - Vercel SPA routing config: `vercel.json`
@@ -86,11 +86,11 @@ Use `npm.cmd` on Windows because PowerShell may block `npm.ps1`.
 
 - Text reveal components live in `src/App.tsx`.
 - Work filtering uses Framer Motion `layout` and `AnimatePresence`.
-- Hero background uses a robot/AI video in `src/App.tsx`.
-- Desktop pointer hover drives throttled cursor-to-pose robot movement, CSS-variable parallax, palette lighting, and a small hero-only bordered cursor marker. Cursor left/middle/right should map to left/front/right robot head positions.
-- Keep the robot video paused on desktop and scrub to eased pose targets. Avoid autoplay loops or playback-rate tricks because they make the robot feel random and can lag.
+- Hero background uses a custom lightweight Three.js robot in `src/components/HeroRobotScene.tsx`, lazy-loaded from `src/App.tsx`.
+- Desktop pointer hover drives real robot head/neck rotation, cursor-reactive light, palette lighting, and a small hero-only bordered cursor marker. Cursor left/middle/right should map to left/front/right robot head positions while the body stays stable.
+- Do not reintroduce the old robot MP4 for head tracking. Avoid video scrubbing, autoplay loops, or playback-rate tricks because they make the robot feel random and can lag.
 - Keep the default browser cursor visible. Do not hide it or replace it with a full-site decorative cursor.
-- Mobile uses normal muted inline playback.
+- Mobile uses the same lazy-loaded Three.js scene at reduced scale and pixel ratio.
 - `src/components/HeroScene.tsx` is a legacy Three.js component and is not the active hero background unless reintroduced intentionally.
 
 ## Before Finishing Changes

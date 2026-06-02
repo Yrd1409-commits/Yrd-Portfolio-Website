@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { lazy, Suspense, useMemo, useRef, useState } from 'react';
 import {
   AnimatePresence,
   MotionValue,
@@ -24,12 +24,13 @@ import {
 import { Category, Project, projects } from './data/projects';
 import { LearningIcon, LearningItem, learning } from './data/learning';
 
+const HeroRobotScene = lazy(() =>
+  import('./components/HeroRobotScene').then((module) => ({ default: module.HeroRobotScene })),
+);
+
 const PRIMARY_TEXT = '#E1E0CC';
 const EASE_OUT = [0.16, 1, 0.3, 1] as const;
 const CARD_EASE = [0.22, 1, 0.36, 1] as const;
-const BG_VIDEO =
-  'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260601_110537_3a579fa0-7bbc-4d94-9d25-0e816c7840f5.mp4';
-
 const filters: Array<'All' | Category> = [
   'All',
   'Marketing Project',
@@ -181,237 +182,19 @@ function ScrollCharacter({
 function Hero() {
   const [menuOpen, setMenuOpen] = useState(false);
   const heroRef = useRef<HTMLDivElement | null>(null);
-  const videoRef = useRef<HTMLVideoElement | null>(null);
   const navLinks = [
     { label: 'Work', href: '#work', active: true },
     { label: 'About', href: '#about' },
     { label: 'Contact', href: '#contact' },
   ];
 
-  useEffect(() => {
-    const hero = heroRef.current;
-    const video = videoRef.current;
-
-    if (!hero || !video) {
-      return undefined;
-    }
-
-    let isHovering = false;
-    let targetX = 0.5;
-    let targetY = 0.42;
-    let currentX = targetX;
-    let currentY = targetY;
-    let targetEnergy = 0;
-    let currentEnergy = 0;
-    let hasMetadata = Number.isFinite(video.duration) && video.duration > 0;
-    let videoDuration = hasMetadata ? video.duration : 0;
-    let targetPoseTime = 0;
-    let currentPoseTime = 0;
-    let lastSeekTime = -1;
-    let lastSeekAt = 0;
-    let seekInFlight = false;
-    let seekUnlockTimer = 0;
-    let previousMoveX = 0;
-    let previousMoveY = 0;
-    let previousMoveTime = performance.now();
-    let animationFrame = 0;
-
-    const playMobileVideo = () => {
-      video.muted = true;
-      video.loop = true;
-      void video.play().catch(() => undefined);
-    };
-
-    const getPoseTime = (x: number) => {
-      if (!videoDuration) {
-        return 0;
-      }
-
-      const clampedX = Math.min(1, Math.max(0, x));
-      const start = videoDuration * 0.08;
-      const end = videoDuration * 0.92;
-
-      return start + (end - start) * clampedX;
-    };
-
-    const seekToPose = (time: number, force = false) => {
-      if (!hasMetadata || window.innerWidth < 1024) {
-        return;
-      }
-
-      const now = performance.now();
-
-      if (!force) {
-        const timeDelta = Math.abs(time - lastSeekTime);
-
-        if (seekInFlight || timeDelta < 0.025 || now - lastSeekAt < 42) {
-          return;
-        }
-      }
-
-      seekInFlight = true;
-      lastSeekAt = now;
-      lastSeekTime = time;
-      window.clearTimeout(seekUnlockTimer);
-      seekUnlockTimer = window.setTimeout(() => {
-        seekInFlight = false;
-      }, 160);
-
-      const media = video as HTMLVideoElement & { fastSeek?: (time: number) => void };
-
-      if (typeof media.fastSeek === 'function') {
-        media.fastSeek(time);
-      } else {
-        video.currentTime = time;
-      }
-    };
-
-    const setRestingState = () => {
-      hero.dataset.heroActive = 'false';
-
-      if (window.innerWidth >= 1024) {
-        video.pause();
-        targetPoseTime = getPoseTime(0.5);
-        currentPoseTime = targetPoseTime;
-        seekToPose(currentPoseTime, true);
-        return;
-      }
-
-      playMobileVideo();
-    };
-
-    const renderCursorMotion = () => {
-      if (!isHovering) {
-        targetEnergy = 0;
-      } else {
-        targetEnergy *= 0.9;
-      }
-
-      currentX += (targetX - currentX) * 0.22;
-      currentY += (targetY - currentY) * 0.22;
-      currentEnergy += (targetEnergy - currentEnergy) * 0.18;
-
-      const movementRangeX = 18 + currentEnergy * 54;
-      const movementRangeY = 10 + currentEnergy * 34;
-      const shiftX = (0.5 - currentX) * movementRangeX;
-      const shiftY = (0.5 - currentY) * movementRangeY;
-      const poseEasing = isHovering ? 0.14 + currentEnergy * 0.1 : 0.08;
-
-      targetPoseTime = getPoseTime(targetX);
-      currentPoseTime += (targetPoseTime - currentPoseTime) * poseEasing;
-
-      hero.style.setProperty('--hero-cursor-x', `${currentX * 100}%`);
-      hero.style.setProperty('--hero-cursor-y', `${currentY * 100}%`);
-      hero.style.setProperty('--hero-pointer-x', `${currentX * hero.clientWidth}px`);
-      hero.style.setProperty('--hero-pointer-y', `${currentY * hero.clientHeight}px`);
-      hero.style.setProperty('--hero-shift-x', `${shiftX}px`);
-      hero.style.setProperty('--hero-shift-y', `${shiftY}px`);
-      hero.style.setProperty('--hero-reactivity', `${currentEnergy.toFixed(3)}`);
-      hero.style.setProperty('--hero-cursor-opacity', isHovering ? '1' : '0');
-
-      seekToPose(currentPoseTime);
-
-      animationFrame = window.requestAnimationFrame(renderCursorMotion);
-    };
-
-    const handlePointerEnter = (event: PointerEvent) => {
-      if (window.innerWidth < 1024) {
-        return;
-      }
-
-      const rect = hero.getBoundingClientRect();
-      isHovering = true;
-      previousMoveX = event.clientX;
-      previousMoveY = event.clientY;
-      previousMoveTime = performance.now();
-      hero.dataset.heroActive = 'true';
-      targetEnergy = 0.1;
-      targetX = Math.min(1, Math.max(0, (event.clientX - rect.left) / rect.width));
-      targetY = Math.min(1, Math.max(0, (event.clientY - rect.top) / rect.height));
-    };
-
-    const handlePointerMove = (event: PointerEvent) => {
-      if (window.innerWidth < 1024) {
-        return;
-      }
-
-      const rect = hero.getBoundingClientRect();
-      const now = performance.now();
-      const deltaX = event.clientX - previousMoveX;
-      const deltaY = event.clientY - previousMoveY;
-      const distance = Math.hypot(deltaX, deltaY);
-      const elapsedMs = Math.max(16, now - previousMoveTime);
-      const velocity = distance / elapsedMs;
-
-      previousMoveX = event.clientX;
-      previousMoveY = event.clientY;
-      previousMoveTime = now;
-      isHovering = true;
-      hero.dataset.heroActive = 'true';
-      targetEnergy = Math.min(1, velocity / 1.45);
-      targetX = Math.min(1, Math.max(0, (event.clientX - rect.left) / rect.width));
-      targetY = Math.min(1, Math.max(0, (event.clientY - rect.top) / rect.height));
-    };
-
-    const handlePointerLeave = () => {
-      isHovering = false;
-      targetEnergy = 0;
-      targetX = 0.5;
-      targetY = 0.42;
-      hero.dataset.heroActive = 'false';
-    };
-
-    const handleMetadataLoaded = () => {
-      hasMetadata = Number.isFinite(video.duration) && video.duration > 0;
-      videoDuration = hasMetadata ? video.duration : 0;
-      setRestingState();
-    };
-
-    const handleSeeked = () => {
-      window.clearTimeout(seekUnlockTimer);
-      seekInFlight = false;
-    };
-
-    const handleResize = () => {
-      setRestingState();
-    };
-
-    video.addEventListener('loadedmetadata', handleMetadataLoaded);
-    video.addEventListener('seeked', handleSeeked);
-    hero.addEventListener('pointerenter', handlePointerEnter, { passive: true });
-    hero.addEventListener('pointermove', handlePointerMove, { passive: true });
-    hero.addEventListener('pointerleave', handlePointerLeave);
-    window.addEventListener('resize', handleResize);
-
-    setRestingState();
-    renderCursorMotion();
-
-    return () => {
-      window.cancelAnimationFrame(animationFrame);
-      window.clearTimeout(seekUnlockTimer);
-      video.removeEventListener('loadedmetadata', handleMetadataLoaded);
-      video.removeEventListener('seeked', handleSeeked);
-      hero.removeEventListener('pointerenter', handlePointerEnter);
-      hero.removeEventListener('pointermove', handlePointerMove);
-      hero.removeEventListener('pointerleave', handlePointerLeave);
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
   return (
     <section className="relative bg-black px-3 pb-0 pt-3 md:min-h-[100dvh] md:p-6">
       <div ref={heroRef} className="hero-robot-stage relative isolate min-h-[76dvh] overflow-hidden rounded-2xl bg-black sm:min-h-[82dvh] md:min-h-[calc(100dvh-3rem)] md:rounded-[2rem]">
         <div className="ambient-gradient absolute inset-0 opacity-70" aria-hidden="true" />
-        <video
-          ref={videoRef}
-          className="hero-robot-video absolute inset-0 h-full w-full object-cover object-[68%_center] opacity-95 md:object-[70%_center] lg:object-[74%_center] xl:object-[78%_center]"
-          src={BG_VIDEO}
-          muted
-          loop
-          playsInline
-          preload="auto"
-          aria-hidden="true"
-        />
+        <Suspense fallback={<div className="hero-robot-scene pointer-events-none absolute inset-0" aria-hidden="true" />}>
+          <HeroRobotScene stageRef={heroRef} />
+        </Suspense>
         <div
           className="hero-cursor-wash pointer-events-none absolute inset-0"
           aria-hidden="true"
