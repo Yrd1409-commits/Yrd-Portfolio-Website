@@ -87,7 +87,8 @@ Use `npm.cmd` on Windows because PowerShell may block `npm.ps1`.
 - Text reveal components live in `src/App.tsx`.
 - Work filtering uses Framer Motion `layout` and `AnimatePresence`.
 - Hero background uses a robot/AI video in `src/App.tsx`.
-- Desktop pointer hover drives CSS-variable parallax, palette lighting, a custom black cursor, and movement-speed-based playback-rate changes. Avoid frame-by-frame `video.currentTime` scrubbing because it can lag badly on remote MP4 files.
+- Desktop pointer hover drives CSS-variable parallax, palette lighting, and movement-speed-based playback-rate changes. The desktop video should pause when the hero is not hovered. Avoid frame-by-frame `video.currentTime` scrubbing because it can lag badly on remote MP4 files.
+- Keep the default browser cursor unless the user explicitly asks for a custom cursor. Do not add decorative cursor blobs.
 - Mobile uses normal muted inline playback.
 - `src/components/HeroScene.tsx` is a legacy Three.js component and is not the active hero background unless reintroduced intentionally.
 

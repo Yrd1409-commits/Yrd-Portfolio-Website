@@ -211,16 +211,22 @@ function Hero() {
     const playVideo = () => {
       video.muted = true;
       video.loop = true;
-      video.playbackRate = window.innerWidth >= 1024 ? 0.32 : 1;
+      video.playbackRate = window.innerWidth >= 1024 ? 0.12 : 1;
       void video.play().catch(() => undefined);
     };
 
-    const renderCursorMotion = () => {
-      const elapsed = performance.now();
+    const setRestingState = () => {
+      if (window.innerWidth >= 1024) {
+        video.pause();
+        video.playbackRate = 0.12;
+        return;
+      }
 
+      playVideo();
+    };
+
+    const renderCursorMotion = () => {
       if (!isHovering) {
-        targetX = 0.72 + Math.sin(elapsed * 0.00032) * 0.018;
-        targetY = 0.42 + Math.cos(elapsed * 0.00026) * 0.014;
         targetEnergy = 0;
       } else {
         targetEnergy *= 0.9;
@@ -239,11 +245,17 @@ function Hero() {
       hero.style.setProperty('--hero-cursor-y', `${currentY * 100}%`);
       hero.style.setProperty('--hero-shift-x', `${shiftX}px`);
       hero.style.setProperty('--hero-shift-y', `${shiftY}px`);
-      hero.style.setProperty('--hero-cursor-opacity', isHovering ? '1' : '0');
-      hero.style.setProperty('--hero-cursor-scale', `${0.86 + currentEnergy * 0.44}`);
 
       if (window.innerWidth >= 1024) {
-        video.playbackRate = isHovering ? 0.42 + currentEnergy * 1.78 : 0.32;
+        if (isHovering) {
+          if (video.paused) {
+            void video.play().catch(() => undefined);
+          }
+
+          video.playbackRate = 0.1 + currentEnergy * 1.7;
+        } else if (!video.paused) {
+          video.pause();
+        }
       }
 
       animationFrame = window.requestAnimationFrame(renderCursorMotion);
@@ -259,11 +271,13 @@ function Hero() {
       previousMoveX = event.clientX;
       previousMoveY = event.clientY;
       previousMoveTime = performance.now();
-      targetEnergy = 0.18;
+      targetEnergy = 0.1;
       targetX = Math.min(1, Math.max(0, (event.clientX - rect.left) / rect.width));
       targetY = Math.min(1, Math.max(0, (event.clientY - rect.top) / rect.height));
-      hero.style.setProperty('--hero-pointer-x', `${event.clientX - rect.left}px`);
-      hero.style.setProperty('--hero-pointer-y', `${event.clientY - rect.top}px`);
+
+      if (video.paused) {
+        void video.play().catch(() => undefined);
+      }
     };
 
     const handlePointerMove = (event: PointerEvent) => {
@@ -286,32 +300,30 @@ function Hero() {
       targetEnergy = Math.min(1, velocity / 1.45);
       targetX = Math.min(1, Math.max(0, (event.clientX - rect.left) / rect.width));
       targetY = Math.min(1, Math.max(0, (event.clientY - rect.top) / rect.height));
-      hero.style.setProperty('--hero-pointer-x', `${event.clientX - rect.left}px`);
-      hero.style.setProperty('--hero-pointer-y', `${event.clientY - rect.top}px`);
     };
 
     const handlePointerLeave = () => {
       isHovering = false;
       targetEnergy = 0;
+      setRestingState();
     };
 
     const handleResize = () => {
-      video.playbackRate = window.innerWidth >= 1024 ? 0.32 : 1;
-      playVideo();
+      setRestingState();
     };
 
-    video.addEventListener('loadeddata', playVideo);
+    video.addEventListener('loadeddata', setRestingState);
     hero.addEventListener('pointerenter', handlePointerEnter, { passive: true });
     hero.addEventListener('pointermove', handlePointerMove, { passive: true });
     hero.addEventListener('pointerleave', handlePointerLeave);
     window.addEventListener('resize', handleResize);
 
-    playVideo();
+    setRestingState();
     renderCursorMotion();
 
     return () => {
       window.cancelAnimationFrame(animationFrame);
-      video.removeEventListener('loadeddata', playVideo);
+      video.removeEventListener('loadeddata', setRestingState);
       hero.removeEventListener('pointerenter', handlePointerEnter);
       hero.removeEventListener('pointermove', handlePointerMove);
       hero.removeEventListener('pointerleave', handlePointerLeave);
@@ -350,7 +362,6 @@ function Hero() {
           className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.48),rgba(0,0,0,0.1)_42%,rgba(0,0,0,0.82))]"
           aria-hidden="true"
         />
-        <div className="hero-custom-cursor pointer-events-none absolute left-0 top-0 z-40 hidden lg:block" aria-hidden="true" />
 
         <nav className="absolute left-0 right-0 top-0 z-20 flex items-center justify-center px-4 py-4 sm:px-6 md:px-8">
           <div className="liquid-glass hidden items-center gap-1 rounded-2xl px-2 py-2 md:flex">
