@@ -197,12 +197,20 @@ function Hero() {
     }
 
     let isHovering = false;
-    let targetX = 0.72;
+    let targetX = 0.5;
     let targetY = 0.42;
     let currentX = targetX;
     let currentY = targetY;
     let targetEnergy = 0;
     let currentEnergy = 0;
+    let hasMetadata = Number.isFinite(video.duration) && video.duration > 0;
+    let videoDuration = hasMetadata ? video.duration : 0;
+    let targetPoseTime = 0;
+    let currentPoseTime = 0;
+    let lastSeekTime = -1;
+    let lastSeekAt = 0;
+    let seekInFlight = false;
+    let seekUnlockTimer = 0;
     let previousMoveX = 0;
     let previousMoveY = 0;
     let previousMoveTime = performance.now();
@@ -211,8 +219,51 @@ function Hero() {
     const playMobileVideo = () => {
       video.muted = true;
       video.loop = true;
-      video.playbackRate = 1;
       void video.play().catch(() => undefined);
+    };
+
+    const getPoseTime = (x: number) => {
+      if (!videoDuration) {
+        return 0;
+      }
+
+      const clampedX = Math.min(1, Math.max(0, x));
+      const start = videoDuration * 0.08;
+      const end = videoDuration * 0.92;
+
+      return start + (end - start) * clampedX;
+    };
+
+    const seekToPose = (time: number, force = false) => {
+      if (!hasMetadata || window.innerWidth < 1024) {
+        return;
+      }
+
+      const now = performance.now();
+
+      if (!force) {
+        const timeDelta = Math.abs(time - lastSeekTime);
+
+        if (seekInFlight || timeDelta < 0.025 || now - lastSeekAt < 42) {
+          return;
+        }
+      }
+
+      seekInFlight = true;
+      lastSeekAt = now;
+      lastSeekTime = time;
+      window.clearTimeout(seekUnlockTimer);
+      seekUnlockTimer = window.setTimeout(() => {
+        seekInFlight = false;
+      }, 160);
+
+      const media = video as HTMLVideoElement & { fastSeek?: (time: number) => void };
+
+      if (typeof media.fastSeek === 'function') {
+        media.fastSeek(time);
+      } else {
+        video.currentTime = time;
+      }
     };
 
     const setRestingState = () => {
@@ -220,6 +271,9 @@ function Hero() {
 
       if (window.innerWidth >= 1024) {
         video.pause();
+        targetPoseTime = getPoseTime(0.5);
+        currentPoseTime = targetPoseTime;
+        seekToPose(currentPoseTime, true);
         return;
       }
 
@@ -241,6 +295,10 @@ function Hero() {
       const movementRangeY = 10 + currentEnergy * 34;
       const shiftX = (0.5 - currentX) * movementRangeX;
       const shiftY = (0.5 - currentY) * movementRangeY;
+      const poseEasing = isHovering ? 0.14 + currentEnergy * 0.1 : 0.08;
+
+      targetPoseTime = getPoseTime(targetX);
+      currentPoseTime += (targetPoseTime - currentPoseTime) * poseEasing;
 
       hero.style.setProperty('--hero-cursor-x', `${currentX * 100}%`);
       hero.style.setProperty('--hero-cursor-y', `${currentY * 100}%`);
@@ -250,6 +308,8 @@ function Hero() {
       hero.style.setProperty('--hero-shift-y', `${shiftY}px`);
       hero.style.setProperty('--hero-reactivity', `${currentEnergy.toFixed(3)}`);
       hero.style.setProperty('--hero-cursor-opacity', isHovering ? '1' : '0');
+
+      seekToPose(currentPoseTime);
 
       animationFrame = window.requestAnimationFrame(renderCursorMotion);
     };
@@ -296,14 +356,28 @@ function Hero() {
     const handlePointerLeave = () => {
       isHovering = false;
       targetEnergy = 0;
+      targetX = 0.5;
+      targetY = 0.42;
       hero.dataset.heroActive = 'false';
+    };
+
+    const handleMetadataLoaded = () => {
+      hasMetadata = Number.isFinite(video.duration) && video.duration > 0;
+      videoDuration = hasMetadata ? video.duration : 0;
+      setRestingState();
+    };
+
+    const handleSeeked = () => {
+      window.clearTimeout(seekUnlockTimer);
+      seekInFlight = false;
     };
 
     const handleResize = () => {
       setRestingState();
     };
 
-    video.addEventListener('loadeddata', setRestingState);
+    video.addEventListener('loadedmetadata', handleMetadataLoaded);
+    video.addEventListener('seeked', handleSeeked);
     hero.addEventListener('pointerenter', handlePointerEnter, { passive: true });
     hero.addEventListener('pointermove', handlePointerMove, { passive: true });
     hero.addEventListener('pointerleave', handlePointerLeave);
@@ -314,7 +388,9 @@ function Hero() {
 
     return () => {
       window.cancelAnimationFrame(animationFrame);
-      video.removeEventListener('loadeddata', setRestingState);
+      window.clearTimeout(seekUnlockTimer);
+      video.removeEventListener('loadedmetadata', handleMetadataLoaded);
+      video.removeEventListener('seeked', handleSeeked);
       hero.removeEventListener('pointerenter', handlePointerEnter);
       hero.removeEventListener('pointermove', handlePointerMove);
       hero.removeEventListener('pointerleave', handlePointerLeave);
