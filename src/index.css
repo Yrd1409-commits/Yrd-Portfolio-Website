@@ -97,14 +97,26 @@ body {
 .hero-robot-stage {
   --hero-cursor-x: 72%;
   --hero-cursor-y: 42%;
+  --hero-pointer-x: 0px;
+  --hero-pointer-y: 0px;
   --hero-shift-x: 0px;
   --hero-shift-y: 0px;
+  --hero-reactivity: 0;
+  --hero-cursor-opacity: 0;
 }
 
 .hero-robot-video {
-  transform: translate3d(var(--hero-shift-x), var(--hero-shift-y), 0) scale(1.08);
-  filter: grayscale(0.42) sepia(0.46) saturate(0.78) hue-rotate(18deg) brightness(0.82) contrast(1.14);
-  will-change: transform;
+  transform:
+    translate3d(var(--hero-shift-x), var(--hero-shift-y), 0)
+    scale(calc(1.08 + (var(--hero-reactivity) * 0.018)));
+  filter:
+    grayscale(0.42)
+    sepia(0.5)
+    saturate(calc(0.82 + (var(--hero-reactivity) * 0.18)))
+    hue-rotate(18deg)
+    brightness(calc(0.82 + (var(--hero-reactivity) * 0.08)))
+    contrast(1.14);
+  will-change: transform, filter;
 }
 
 .hero-cursor-wash {
@@ -121,8 +133,10 @@ body {
       rgba(0, 0, 0, 0.58) 31%,
       rgba(0, 0, 0, 0.16) 66%,
       rgba(0, 0, 0, 0.66) 100%
-    );
+  );
   mix-blend-mode: soft-light;
+  opacity: calc(0.72 + (var(--hero-reactivity) * 0.28));
+  transition: opacity 180ms ease;
 }
 
 .hero-palette-grade {
@@ -131,6 +145,40 @@ body {
     linear-gradient(240deg, rgba(168, 184, 156, 0.26), rgba(0, 0, 0, 0) 44%),
     linear-gradient(0deg, rgba(0, 0, 0, 0.18), rgba(222, 219, 200, 0.07));
   mix-blend-mode: color;
+}
+
+.hero-cursor-target {
+  left: 0;
+  top: 0;
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba(222, 219, 200, 0.9);
+  border-radius: 8px 8px 8px 2px;
+  opacity: var(--hero-cursor-opacity);
+  transform:
+    translate3d(
+      calc(var(--hero-pointer-x) - 6px),
+      calc(var(--hero-pointer-y) - 6px),
+      0
+    )
+    rotate(-10deg)
+    scale(calc(0.92 + (var(--hero-reactivity) * 0.16)));
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: opacity 120ms ease;
+  will-change: transform, opacity;
+}
+
+.hero-cursor-target::after {
+  content: "";
+  position: absolute;
+  right: -7px;
+  bottom: -7px;
+  width: 9px;
+  height: 9px;
+  border-right: 2px solid rgba(222, 219, 200, 0.9);
+  border-bottom: 2px solid rgba(222, 219, 200, 0.9);
 }
 
 .hero-scene canvas {

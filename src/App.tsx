@@ -208,21 +208,22 @@ function Hero() {
     let previousMoveTime = performance.now();
     let animationFrame = 0;
 
-    const playVideo = () => {
+    const playMobileVideo = () => {
       video.muted = true;
       video.loop = true;
-      video.playbackRate = window.innerWidth >= 1024 ? 0.12 : 1;
+      video.playbackRate = 1;
       void video.play().catch(() => undefined);
     };
 
     const setRestingState = () => {
+      hero.dataset.heroActive = 'false';
+
       if (window.innerWidth >= 1024) {
         video.pause();
-        video.playbackRate = 0.12;
         return;
       }
 
-      playVideo();
+      playMobileVideo();
     };
 
     const renderCursorMotion = () => {
@@ -243,20 +244,12 @@ function Hero() {
 
       hero.style.setProperty('--hero-cursor-x', `${currentX * 100}%`);
       hero.style.setProperty('--hero-cursor-y', `${currentY * 100}%`);
+      hero.style.setProperty('--hero-pointer-x', `${currentX * hero.clientWidth}px`);
+      hero.style.setProperty('--hero-pointer-y', `${currentY * hero.clientHeight}px`);
       hero.style.setProperty('--hero-shift-x', `${shiftX}px`);
       hero.style.setProperty('--hero-shift-y', `${shiftY}px`);
-
-      if (window.innerWidth >= 1024) {
-        if (isHovering) {
-          if (video.paused) {
-            void video.play().catch(() => undefined);
-          }
-
-          video.playbackRate = 0.1 + currentEnergy * 1.7;
-        } else if (!video.paused) {
-          video.pause();
-        }
-      }
+      hero.style.setProperty('--hero-reactivity', `${currentEnergy.toFixed(3)}`);
+      hero.style.setProperty('--hero-cursor-opacity', isHovering ? '1' : '0');
 
       animationFrame = window.requestAnimationFrame(renderCursorMotion);
     };
@@ -271,13 +264,10 @@ function Hero() {
       previousMoveX = event.clientX;
       previousMoveY = event.clientY;
       previousMoveTime = performance.now();
+      hero.dataset.heroActive = 'true';
       targetEnergy = 0.1;
       targetX = Math.min(1, Math.max(0, (event.clientX - rect.left) / rect.width));
       targetY = Math.min(1, Math.max(0, (event.clientY - rect.top) / rect.height));
-
-      if (video.paused) {
-        void video.play().catch(() => undefined);
-      }
     };
 
     const handlePointerMove = (event: PointerEvent) => {
@@ -297,6 +287,7 @@ function Hero() {
       previousMoveY = event.clientY;
       previousMoveTime = now;
       isHovering = true;
+      hero.dataset.heroActive = 'true';
       targetEnergy = Math.min(1, velocity / 1.45);
       targetX = Math.min(1, Math.max(0, (event.clientX - rect.left) / rect.width));
       targetY = Math.min(1, Math.max(0, (event.clientY - rect.top) / rect.height));
@@ -305,7 +296,7 @@ function Hero() {
     const handlePointerLeave = () => {
       isHovering = false;
       targetEnergy = 0;
-      setRestingState();
+      hero.dataset.heroActive = 'false';
     };
 
     const handleResize = () => {
@@ -339,7 +330,6 @@ function Hero() {
           ref={videoRef}
           className="hero-robot-video absolute inset-0 h-full w-full object-cover object-[68%_center] opacity-95 md:object-[70%_center] lg:object-[74%_center] xl:object-[78%_center]"
           src={BG_VIDEO}
-          autoPlay
           muted
           loop
           playsInline
@@ -362,6 +352,7 @@ function Hero() {
           className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.48),rgba(0,0,0,0.1)_42%,rgba(0,0,0,0.82))]"
           aria-hidden="true"
         />
+        <div className="hero-cursor-target pointer-events-none absolute z-20 hidden lg:block" aria-hidden="true" />
 
         <nav className="absolute left-0 right-0 top-0 z-20 flex items-center justify-center px-4 py-4 sm:px-6 md:px-8">
           <div className="liquid-glass hidden items-center gap-1 rounded-2xl px-2 py-2 md:flex">
