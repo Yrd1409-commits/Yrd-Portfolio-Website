@@ -79,10 +79,12 @@ body {
 
 .ambient-gradient {
   background:
-    linear-gradient(120deg, rgba(222, 219, 200, 0.16), transparent 34%),
-    linear-gradient(225deg, rgba(168, 184, 156, 0.12), transparent 45%),
-    linear-gradient(315deg, rgba(156, 168, 184, 0.12), transparent 42%),
-    #050505;
+    radial-gradient(circle at 74% 38%, rgba(222, 219, 200, 0.34), transparent 28%),
+    radial-gradient(circle at 88% 18%, rgba(168, 184, 156, 0.22), transparent 32%),
+    linear-gradient(120deg, rgba(222, 219, 200, 0.2), transparent 34%),
+    linear-gradient(225deg, rgba(168, 184, 156, 0.16), transparent 45%),
+    linear-gradient(315deg, rgba(156, 168, 184, 0.1), transparent 42%),
+    #080807;
   background-size: 180% 180%;
   animation: ambient-pan 18s ease-in-out infinite alternate;
 }
@@ -102,13 +104,15 @@ body {
   --hero-reactivity: 0;
   --hero-cursor-opacity: 0;
   background:
-    radial-gradient(circle at 72% 42%, rgba(222, 219, 200, 0.18), transparent 30%),
-    linear-gradient(110deg, rgba(16, 16, 16, 0.96), rgba(28, 30, 27, 0.9) 58%, rgba(8, 8, 8, 0.98)),
-    #050505;
+    radial-gradient(circle at 76% 38%, rgba(222, 219, 200, 0.34), transparent 31%),
+    radial-gradient(circle at 88% 74%, rgba(168, 184, 156, 0.18), transparent 34%),
+    linear-gradient(110deg, rgba(18, 18, 15, 0.92), rgba(58, 60, 50, 0.62) 58%, rgba(14, 14, 12, 0.9)),
+    #080807;
 }
 
 .hero-robot-scene {
-  opacity: 0.98;
+  opacity: 1;
+  filter: brightness(1.42) contrast(1.08) saturate(1.05);
 }
 
 .hero-robot-canvas {
@@ -121,28 +125,29 @@ body {
   background:
     radial-gradient(
       circle at var(--hero-cursor-x) var(--hero-cursor-y),
-      rgba(222, 219, 200, 0.36),
-      rgba(168, 184, 156, 0.14) 18%,
+      rgba(222, 219, 200, 0.52),
+      rgba(168, 184, 156, 0.2) 18%,
       rgba(0, 0, 0, 0) 42%
     ),
     linear-gradient(
       90deg,
-      rgba(0, 0, 0, 0.88) 0%,
-      rgba(0, 0, 0, 0.58) 31%,
-      rgba(0, 0, 0, 0.16) 66%,
-      rgba(0, 0, 0, 0.66) 100%
+      rgba(0, 0, 0, 0.58) 0%,
+      rgba(0, 0, 0, 0.34) 31%,
+      rgba(0, 0, 0, 0.04) 66%,
+      rgba(0, 0, 0, 0.42) 100%
   );
-  mix-blend-mode: soft-light;
-  opacity: calc(0.72 + (var(--hero-reactivity) * 0.28));
+  mix-blend-mode: screen;
+  opacity: calc(0.5 + (var(--hero-reactivity) * 0.22));
   transition: opacity 180ms ease;
 }
 
 .hero-palette-grade {
   background:
-    linear-gradient(120deg, rgba(222, 219, 200, 0.32), rgba(0, 0, 0, 0) 42%),
-    linear-gradient(240deg, rgba(168, 184, 156, 0.26), rgba(0, 0, 0, 0) 44%),
-    linear-gradient(0deg, rgba(0, 0, 0, 0.18), rgba(222, 219, 200, 0.07));
-  mix-blend-mode: color;
+    linear-gradient(120deg, rgba(222, 219, 200, 0.2), rgba(0, 0, 0, 0) 42%),
+    linear-gradient(240deg, rgba(168, 184, 156, 0.16), rgba(0, 0, 0, 0) 44%),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.08), rgba(222, 219, 200, 0.05));
+  mix-blend-mode: soft-light;
+  opacity: 0.86;
 }
 
 .hero-cursor-target {

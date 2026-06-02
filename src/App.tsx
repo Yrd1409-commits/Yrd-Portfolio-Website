@@ -191,7 +191,7 @@ function Hero() {
   return (
     <section className="relative bg-black px-3 pb-0 pt-3 md:min-h-[100dvh] md:p-6">
       <div ref={heroRef} className="hero-robot-stage relative isolate min-h-[76dvh] overflow-hidden rounded-2xl bg-black sm:min-h-[82dvh] md:min-h-[calc(100dvh-3rem)] md:rounded-[2rem]">
-        <div className="ambient-gradient absolute inset-0 opacity-70" aria-hidden="true" />
+        <div className="ambient-gradient absolute inset-0 opacity-90" aria-hidden="true" />
         <Suspense fallback={<div className="hero-robot-scene pointer-events-none absolute inset-0" aria-hidden="true" />}>
           <HeroRobotScene stageRef={heroRef} />
         </Suspense>
@@ -204,11 +204,11 @@ function Hero() {
           aria-hidden="true"
         />
         <div
-          className="noise-overlay pointer-events-none absolute inset-0 opacity-[0.55] mix-blend-overlay"
+          className="noise-overlay pointer-events-none absolute inset-0 opacity-[0.34] mix-blend-overlay"
           aria-hidden="true"
         />
         <div
-          className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.48),rgba(0,0,0,0.1)_42%,rgba(0,0,0,0.82))]"
+          className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.22),rgba(0,0,0,0.02)_42%,rgba(0,0,0,0.56))]"
           aria-hidden="true"
         />
         <div className="hero-cursor-target pointer-events-none absolute z-20 hidden lg:block" aria-hidden="true" />

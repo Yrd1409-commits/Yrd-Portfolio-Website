@@ -7,7 +7,7 @@ interface HeroRobotSceneProps {
 
 const cream = new THREE.Color('#DEDBC8');
 const softSage = new THREE.Color('#A8B89C');
-const warmBlack = new THREE.Color('#050505');
+const warmBlack = new THREE.Color('#15150f');
 
 const lerp = (current: number, target: number, amount: number) => current + (target - current) * amount;
 
@@ -47,7 +47,7 @@ export function HeroRobotScene({ stageRef }: HeroRobotSceneProps) {
     renderer.setClearColor(0x000000, 0);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.08;
+    renderer.toneMappingExposure = 1.32;
     renderer.domElement.className = 'hero-robot-canvas';
     mount.appendChild(renderer.domElement);
 
@@ -60,21 +60,22 @@ export function HeroRobotScene({ stageRef }: HeroRobotSceneProps) {
 
     const shellMaterial = new THREE.MeshPhysicalMaterial({
       color: warmBlack,
-      metalness: 0.76,
-      roughness: 0.14,
+      metalness: 0.72,
+      roughness: 0.11,
       clearcoat: 1,
       clearcoatRoughness: 0.05,
+      reflectivity: 0.88,
     });
 
     const glassMaterial = new THREE.MeshPhysicalMaterial({
-      color: new THREE.Color('#171914'),
-      metalness: 0.18,
+      color: new THREE.Color('#34372b'),
+      metalness: 0.16,
       roughness: 0.05,
       clearcoat: 1,
       clearcoatRoughness: 0.04,
       transparent: true,
-      opacity: 0.54,
-      transmission: 0.18,
+      opacity: 0.66,
+      transmission: 0.08,
     });
 
     const creamLineMaterial = new THREE.LineBasicMaterial({
@@ -92,14 +93,14 @@ export function HeroRobotScene({ stageRef }: HeroRobotSceneProps) {
     const glintMaterial = new THREE.MeshBasicMaterial({
       color: cream,
       transparent: true,
-      opacity: 0.72,
+      opacity: 0.92,
       depthWrite: false,
     });
 
     const auraMaterial = new THREE.MeshBasicMaterial({
       color: softSage,
       transparent: true,
-      opacity: 0.09,
+      opacity: 0.16,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
     });
@@ -142,14 +143,14 @@ export function HeroRobotScene({ stageRef }: HeroRobotSceneProps) {
     const ringMaterialA = new THREE.MeshBasicMaterial({
       color: cream,
       transparent: true,
-      opacity: 0.28,
+      opacity: 0.42,
       depthWrite: false,
     });
 
     const ringMaterialB = new THREE.MeshBasicMaterial({
       color: softSage,
       transparent: true,
-      opacity: 0.22,
+      opacity: 0.32,
       depthWrite: false,
     });
 
@@ -162,18 +163,18 @@ export function HeroRobotScene({ stageRef }: HeroRobotSceneProps) {
     halo.add(ringB);
 
     const ringC = new THREE.Mesh(new THREE.TorusGeometry(1.42, 0.004, 8, 128), ringMaterialA.clone());
-    (ringC.material as THREE.MeshBasicMaterial).opacity = 0.16;
+    (ringC.material as THREE.MeshBasicMaterial).opacity = 0.24;
     ringC.rotation.set(1.68, 0.08, 0.72);
     halo.add(ringC);
 
     const spineMaterial = new THREE.MeshPhysicalMaterial({
-      color: new THREE.Color('#090907'),
-      metalness: 0.52,
-      roughness: 0.2,
+      color: new THREE.Color('#191911'),
+      metalness: 0.48,
+      roughness: 0.16,
       clearcoat: 0.9,
       clearcoatRoughness: 0.08,
       transparent: true,
-      opacity: 0.68,
+      opacity: 0.78,
     });
 
     const spine = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.18, 0.98, 36), spineMaterial);
@@ -182,7 +183,7 @@ export function HeroRobotScene({ stageRef }: HeroRobotSceneProps) {
     rig.add(spine);
 
     const baseRing = new THREE.Mesh(new THREE.TorusGeometry(0.42, 0.018, 12, 96), ringMaterialA.clone());
-    (baseRing.material as THREE.MeshBasicMaterial).opacity = 0.18;
+    (baseRing.material as THREE.MeshBasicMaterial).opacity = 0.3;
     baseRing.position.set(0, -1.78, 0.02);
     baseRing.rotation.x = Math.PI / 2;
     rig.add(baseRing);
@@ -224,18 +225,22 @@ export function HeroRobotScene({ stageRef }: HeroRobotSceneProps) {
     neuralField.position.set(0.02, 0.04, -0.46);
     neuralField.scale.setScalar(0.88);
 
-    const ambient = new THREE.HemisphereLight(0xdedbc8, 0x050505, 1.2);
+    const ambient = new THREE.HemisphereLight(0xdedbc8, 0x080807, 1.75);
     scene.add(ambient);
 
-    const keyLight = new THREE.DirectionalLight(0xdedbc8, 3.8);
+    const keyLight = new THREE.DirectionalLight(0xdedbc8, 5.4);
     keyLight.position.set(-2.2, 2.6, 3.1);
     scene.add(keyLight);
 
-    const rimLight = new THREE.DirectionalLight(0xa8b89c, 2.4);
+    const rimLight = new THREE.DirectionalLight(0xa8b89c, 3.8);
     rimLight.position.set(3.1, 1.7, 2.8);
     scene.add(rimLight);
 
-    const cursorLight = new THREE.PointLight(0xdedbc8, 2.4, 6.5);
+    const fillLight = new THREE.PointLight(0xdedbc8, 1.9, 7);
+    fillLight.position.set(0.8, -0.6, 3.4);
+    scene.add(fillLight);
+
+    const cursorLight = new THREE.PointLight(0xdedbc8, 3.2, 6.5);
     cursorLight.position.set(-0.6, 0.7, 2.8);
     scene.add(cursorLight);
 
@@ -359,7 +364,7 @@ export function HeroRobotScene({ stageRef }: HeroRobotSceneProps) {
 
       cursorLight.position.x = lerp(cursorLight.position.x, (pointer.x - 0.5) * 4.2, 0.12);
       cursorLight.position.y = lerp(cursorLight.position.y, (0.5 - pointer.y) * 2.1 + 0.68, 0.12);
-      cursorLight.intensity = lerp(cursorLight.intensity, pointer.active ? 2.8 + micro * 1.4 : 1.55, 0.08);
+      cursorLight.intensity = lerp(cursorLight.intensity, pointer.active ? 3.6 + micro * 1.8 : 2.25, 0.08);
 
       longGlint.position.x = -0.32 - yaw * 0.14;
       cheekGlint.position.x = 0.34 - yaw * 0.2;
