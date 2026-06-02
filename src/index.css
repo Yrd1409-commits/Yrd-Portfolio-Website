@@ -97,8 +97,12 @@ body {
 .hero-robot-stage {
   --hero-cursor-x: 72%;
   --hero-cursor-y: 42%;
+  --hero-pointer-x: 72%;
+  --hero-pointer-y: 42%;
   --hero-shift-x: 0px;
   --hero-shift-y: 0px;
+  --hero-cursor-opacity: 0;
+  --hero-cursor-scale: 0.86;
 }
 
 .hero-robot-video {
@@ -131,6 +135,42 @@ body {
     linear-gradient(240deg, rgba(168, 184, 156, 0.26), rgba(0, 0, 0, 0) 44%),
     linear-gradient(0deg, rgba(0, 0, 0, 0.18), rgba(222, 219, 200, 0.07));
   mix-blend-mode: color;
+}
+
+.hero-custom-cursor {
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(222, 219, 200, 0.72);
+  border-radius: 999px;
+  background: #050505;
+  opacity: var(--hero-cursor-opacity);
+  transform:
+    translate3d(
+      calc(var(--hero-pointer-x) - 50%),
+      calc(var(--hero-pointer-y) - 50%),
+      0
+    )
+    scale(var(--hero-cursor-scale));
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.36),
+    0 12px 34px rgba(0, 0, 0, 0.42),
+    inset 0 1px 0 rgba(222, 219, 200, 0.18);
+  transition: opacity 160ms ease;
+  will-change: transform, opacity;
+}
+
+.hero-custom-cursor::after {
+  content: "";
+  position: absolute;
+  inset: 13px;
+  border-radius: inherit;
+  border: 1px solid rgba(222, 219, 200, 0.58);
+}
+
+@media (min-width: 1024px) {
+  .hero-robot-stage {
+    cursor: none;
+  }
 }
 
 .hero-scene canvas {
