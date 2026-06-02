@@ -180,6 +180,7 @@ function ScrollCharacter({
 
 function Hero() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const heroRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const navLinks = [
     { label: 'Work', href: '#work', active: true },
@@ -188,85 +189,88 @@ function Hero() {
   ];
 
   useEffect(() => {
+    const hero = heroRef.current;
     const video = videoRef.current;
 
-    if (!video) {
+    if (!hero || !video) {
       return undefined;
     }
 
-    let previousX = window.innerWidth / 2;
-    let targetTime = 0;
-    let isSeeking = false;
+    let targetX = 0.72;
+    let targetY = 0.42;
+    let currentX = targetX;
+    let currentY = targetY;
+    let animationFrame = 0;
 
-    const clampTime = (value: number) => {
-      const duration = Number.isFinite(video.duration) && video.duration > 0 ? video.duration : 0;
-      return duration ? Math.min(duration, Math.max(0, value)) : 0;
+    const playVideo = () => {
+      video.muted = true;
+      video.loop = true;
+      video.playbackRate = window.innerWidth >= 1024 ? 1.18 : 1;
+      void video.play().catch(() => undefined);
     };
 
-    const syncPlaybackMode = () => {
-      if (window.innerWidth < 1024) {
-        video.loop = true;
-        video.autoplay = true;
-        void video.play().catch(() => undefined);
-        return;
+    const renderCursorMotion = () => {
+      currentX += (targetX - currentX) * 0.22;
+      currentY += (targetY - currentY) * 0.22;
+
+      const shiftX = (0.5 - currentX) * 44;
+      const shiftY = (0.5 - currentY) * 28;
+
+      hero.style.setProperty('--hero-cursor-x', `${currentX * 100}%`);
+      hero.style.setProperty('--hero-cursor-y', `${currentY * 100}%`);
+      hero.style.setProperty('--hero-shift-x', `${shiftX}px`);
+      hero.style.setProperty('--hero-shift-y', `${shiftY}px`);
+
+      if (window.innerWidth >= 1024) {
+        video.playbackRate = 1.02 + currentX * 0.52;
       }
 
-      video.pause();
-      targetTime = clampTime(video.currentTime || video.duration * 0.18 || 0);
-      video.currentTime = targetTime;
-    };
-
-    const handleLoadedMetadata = () => {
-      targetTime = clampTime(video.duration * 0.18);
-      syncPlaybackMode();
-    };
-
-    const seekToTarget = () => {
-      if (isSeeking || window.innerWidth < 1024) {
-        return;
-      }
-
-      isSeeking = true;
-      video.currentTime = clampTime(targetTime);
-    };
-
-    const handleSeeked = () => {
-      isSeeking = false;
+      animationFrame = window.requestAnimationFrame(renderCursorMotion);
     };
 
     const handleMouseMove = (event: MouseEvent) => {
-      if (window.innerWidth < 1024 || !video.duration) {
-        previousX = event.clientX;
+      if (window.innerWidth < 1024) {
         return;
       }
 
-      const delta = event.clientX - previousX;
-      previousX = event.clientX;
-      targetTime = clampTime(targetTime + (delta / window.innerWidth) * 0.8 * video.duration);
-      seekToTarget();
+      targetX = Math.min(1, Math.max(0, event.clientX / window.innerWidth));
+      targetY = Math.min(1, Math.max(0, event.clientY / window.innerHeight));
     };
 
-    video.addEventListener('loadedmetadata', handleLoadedMetadata);
-    video.addEventListener('seeked', handleSeeked);
+    const handlePointerLeave = () => {
+      targetX = 0.72;
+      targetY = 0.42;
+    };
+
+    const handleResize = () => {
+      video.playbackRate = window.innerWidth >= 1024 ? 1.18 : 1;
+      playVideo();
+    };
+
+    video.addEventListener('loadeddata', playVideo);
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
-    window.addEventListener('resize', syncPlaybackMode);
-    syncPlaybackMode();
+    window.addEventListener('pointerleave', handlePointerLeave);
+    window.addEventListener('resize', handleResize);
+
+    playVideo();
+    renderCursorMotion();
 
     return () => {
-      video.removeEventListener('loadedmetadata', handleLoadedMetadata);
-      video.removeEventListener('seeked', handleSeeked);
+      window.cancelAnimationFrame(animationFrame);
+      video.removeEventListener('loadeddata', playVideo);
       window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('resize', syncPlaybackMode);
+      window.removeEventListener('pointerleave', handlePointerLeave);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
   return (
     <section className="relative bg-black px-3 pb-0 pt-3 md:min-h-[100dvh] md:p-6">
-      <div className="relative isolate min-h-[76dvh] overflow-hidden rounded-2xl bg-black sm:min-h-[82dvh] md:min-h-[calc(100dvh-3rem)] md:rounded-[2rem]">
+      <div ref={heroRef} className="hero-robot-stage relative isolate min-h-[76dvh] overflow-hidden rounded-2xl bg-black sm:min-h-[82dvh] md:min-h-[calc(100dvh-3rem)] md:rounded-[2rem]">
         <div className="ambient-gradient absolute inset-0 opacity-70" aria-hidden="true" />
         <video
           ref={videoRef}
-          className="absolute inset-0 h-full w-full object-cover object-[68%_center] opacity-90 mix-blend-screen saturate-[0.72] sepia-[0.18] contrast-[1.08] brightness-[0.72] md:object-[70%_center] lg:object-[74%_center] xl:object-[78%_center]"
+          className="hero-robot-video absolute inset-0 h-full w-full object-cover object-[68%_center] opacity-95 md:object-[70%_center] lg:object-[74%_center] xl:object-[78%_center]"
           src={BG_VIDEO}
           autoPlay
           muted
@@ -276,11 +280,11 @@ function Hero() {
           aria-hidden="true"
         />
         <div
-          className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.86)_0%,rgba(0,0,0,0.52)_34%,rgba(0,0,0,0.18)_66%,rgba(0,0,0,0.62)_100%),radial-gradient(circle_at_72%_34%,rgba(222,219,200,0.18),transparent_28%),radial-gradient(circle_at_82%_64%,rgba(168,184,156,0.18),transparent_32%)] mix-blend-multiply"
+          className="hero-cursor-wash pointer-events-none absolute inset-0"
           aria-hidden="true"
         />
         <div
-          className="pointer-events-none absolute inset-0 bg-[linear-gradient(120deg,rgba(222,219,200,0.16),transparent_38%),linear-gradient(240deg,rgba(156,168,184,0.13),transparent_44%)] mix-blend-color"
+          className="hero-palette-grade pointer-events-none absolute inset-0"
           aria-hidden="true"
         />
         <div

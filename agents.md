@@ -17,7 +17,8 @@ Use `npm.cmd` on Windows because PowerShell may block `npm.ps1`.
 - Global CSS and custom utilities: `src/index.css`
 - Project data: `src/data/projects.ts`
 - Learning/status data: `src/data/learning.ts`
-- Hero 3D background: `src/components/HeroScene.tsx`
+- Hero robot video background and cursor interaction: `src/App.tsx`
+- Legacy hero 3D scene component: `src/components/HeroScene.tsx`
 - Static public assets: `public/projects/`
 - Vercel SPA routing config: `vercel.json`
 - HTML shell and Google Fonts: `index.html`
@@ -85,9 +86,10 @@ Use `npm.cmd` on Windows because PowerShell may block `npm.ps1`.
 
 - Text reveal components live in `src/App.tsx`.
 - Work filtering uses Framer Motion `layout` and `AnimatePresence`.
-- Hero background uses Three.js in `src/components/HeroScene.tsx`.
-- Three.js is dynamically imported so the main app bundle stays lighter.
-- If editing the hero scene, verify it still renders on desktop and mobile.
+- Hero background uses a robot/AI video in `src/App.tsx`.
+- Desktop cursor movement drives CSS-variable parallax, palette lighting, and subtle playback-rate changes. Avoid frame-by-frame `video.currentTime` scrubbing because it can lag badly on remote MP4 files.
+- Mobile uses normal muted inline playback.
+- `src/components/HeroScene.tsx` is a legacy Three.js component and is not the active hero background unless reintroduced intentionally.
 
 ## Before Finishing Changes
 
