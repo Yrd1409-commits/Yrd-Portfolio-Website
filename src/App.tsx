@@ -1,4 +1,4 @@
-import { lazy, Suspense, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   AnimatePresence,
   MotionValue,
@@ -24,13 +24,11 @@ import {
 import { Category, Project, projects } from './data/projects';
 import { LearningIcon, LearningItem, learning } from './data/learning';
 
-const HeroRobotScene = lazy(() =>
-  import('./components/HeroRobotScene').then((module) => ({ default: module.HeroRobotScene })),
-);
-
 const PRIMARY_TEXT = '#E1E0CC';
 const EASE_OUT = [0.16, 1, 0.3, 1] as const;
 const CARD_EASE = [0.22, 1, 0.36, 1] as const;
+const SPLINE_VIEWER_SRC = 'https://unpkg.com/@splinetool/viewer@1.12.97/build/spline-viewer.js';
+const SPLINE_SCENE_URL = 'https://prod.spline.design/M4doTbBfF52u8Gr2/scene.splinecode';
 const filters: Array<'All' | Category> = [
   'All',
   'Marketing Project',
@@ -49,6 +47,78 @@ const categoryIcons: Record<Category, typeof BarChart3> = {
   Automation: Workflow,
   'Web App / Website': Code2,
 };
+
+function SplineHeroScene() {
+  const [shouldLoadSpline, setShouldLoadSpline] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(min-width: 768px)');
+    const updateShouldLoad = () => setShouldLoadSpline(mediaQuery.matches);
+
+    updateShouldLoad();
+    mediaQuery.addEventListener('change', updateShouldLoad);
+
+    return () => {
+      mediaQuery.removeEventListener('change', updateShouldLoad);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!shouldLoadSpline) {
+      return undefined;
+    }
+
+    if (customElements.get('spline-viewer')) {
+      return undefined;
+    }
+
+    let isMounted = true;
+    let scheduledLoad = 0;
+    const existingScript = document.querySelector<HTMLScriptElement>('script[data-spline-viewer]');
+
+    if (existingScript) {
+      return () => {
+        isMounted = false;
+      };
+    }
+
+    const loadViewer = () => {
+      if (!isMounted || document.querySelector('script[data-spline-viewer]')) {
+        return;
+      }
+
+      const script = document.createElement('script');
+      script.type = 'module';
+      script.async = true;
+      script.src = SPLINE_VIEWER_SRC;
+      script.dataset.splineViewer = 'true';
+      document.head.appendChild(script);
+    };
+
+    scheduledLoad = window.setTimeout(loadViewer, 120);
+
+    return () => {
+      isMounted = false;
+      window.clearTimeout(scheduledLoad);
+    };
+  }, [shouldLoadSpline]);
+
+  return (
+    <div className="hero-spline-scene absolute inset-0" aria-hidden="true">
+      <div className="hero-spline-fallback absolute inset-0" />
+      {shouldLoadSpline ? (
+        <spline-viewer
+          class="hero-spline-viewer"
+          url={SPLINE_SCENE_URL}
+          loading-anim-type="none"
+          events-target="global"
+          hint="false"
+          logo="false"
+        />
+      ) : null}
+    </div>
+  );
+}
 
 interface WordsPullUpProps {
   text: string;
@@ -181,7 +251,6 @@ function ScrollCharacter({
 
 function Hero() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const heroRef = useRef<HTMLDivElement | null>(null);
   const navLinks = [
     { label: 'Work', href: '#work', active: true },
     { label: 'About', href: '#about' },
@@ -190,30 +259,17 @@ function Hero() {
 
   return (
     <section className="relative bg-black px-3 pb-0 pt-3 md:min-h-[100dvh] md:p-6">
-      <div ref={heroRef} className="hero-robot-stage relative isolate min-h-[76dvh] overflow-hidden rounded-2xl bg-black sm:min-h-[82dvh] md:min-h-[calc(100dvh-3rem)] md:rounded-[2rem]">
-        <div className="ambient-gradient absolute inset-0 opacity-90" aria-hidden="true" />
-        <Suspense fallback={<div className="hero-robot-scene pointer-events-none absolute inset-0" aria-hidden="true" />}>
-          <HeroRobotScene stageRef={heroRef} />
-        </Suspense>
+      <div className="hero-spline-stage relative isolate min-h-[76dvh] overflow-hidden rounded-2xl bg-black sm:min-h-[82dvh] md:min-h-[calc(100dvh-3rem)] md:rounded-[2rem]">
+        <SplineHeroScene />
+        <div className="hero-spline-title-mask pointer-events-none absolute inset-0 z-[1]" aria-hidden="true" />
+        <div className="hero-spline-warmth pointer-events-none absolute inset-0 z-[2]" aria-hidden="true" />
+        <div className="hero-spline-legibility pointer-events-none absolute inset-0 z-[3]" aria-hidden="true" />
         <div
-          className="hero-cursor-wash pointer-events-none absolute inset-0"
+          className="noise-overlay pointer-events-none absolute inset-0 z-[4] opacity-[0.34] mix-blend-overlay"
           aria-hidden="true"
         />
-        <div
-          className="hero-palette-grade pointer-events-none absolute inset-0"
-          aria-hidden="true"
-        />
-        <div
-          className="noise-overlay pointer-events-none absolute inset-0 opacity-[0.34] mix-blend-overlay"
-          aria-hidden="true"
-        />
-        <div
-          className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.22),rgba(0,0,0,0.02)_42%,rgba(0,0,0,0.56))]"
-          aria-hidden="true"
-        />
-        <div className="hero-cursor-target pointer-events-none absolute z-20 hidden lg:block" aria-hidden="true" />
 
-        <nav className="absolute left-0 right-0 top-0 z-20 flex items-center justify-center px-4 py-4 sm:px-6 md:px-8">
+        <nav className="absolute left-0 right-0 top-0 z-40 flex items-center justify-center px-4 py-4 sm:px-6 md:px-8">
           <div className="liquid-glass hidden items-center gap-1 rounded-2xl px-2 py-2 md:flex">
             {navLinks.map((link) => (
               <a
@@ -240,7 +296,7 @@ function Hero() {
         </nav>
 
         {menuOpen ? (
-          <div className="liquid-glass absolute left-4 right-4 top-[72px] z-30 flex flex-col gap-1 rounded-2xl p-4 md:hidden">
+          <div className="liquid-glass absolute left-4 right-4 top-[72px] z-50 flex flex-col gap-1 rounded-2xl p-4 md:hidden">
             {navLinks.map((link) => (
               <a
                 key={link.label}
@@ -256,8 +312,8 @@ function Hero() {
           </div>
         ) : null}
 
-        <div className="absolute bottom-[clamp(2rem,6dvh,4rem)] left-0 right-0 p-4 sm:bottom-[clamp(3rem,8dvh,5.5rem)] sm:p-6 md:bottom-0 md:p-8 lg:p-10">
-          <div className="min-w-0 max-w-[46rem] lg:max-w-[58rem]">
+        <div className="absolute bottom-[clamp(2rem,6dvh,4rem)] left-0 right-0 z-40 p-4 sm:bottom-[clamp(3rem,8dvh,5.5rem)] sm:p-6 md:bottom-0 md:p-8 lg:p-10">
+          <div className="min-w-0 max-w-[46rem] lg:max-w-[48rem]">
             <h1
               className="min-w-0"
               aria-label="Yash Raj"
@@ -266,7 +322,7 @@ function Hero() {
               <WordsPullUp
                 text="Yash Raj"
                 showAsterisk
-                className="max-w-full whitespace-nowrap text-[clamp(3.75rem,16vw,12.8rem)] font-medium leading-[0.85] tracking-[-0.07em] sm:text-[clamp(5.5rem,16vw,12.8rem)] lg:text-[clamp(6.75rem,12.4vw,11.8rem)]"
+                className="max-w-full !flex-nowrap whitespace-nowrap text-[clamp(3.75rem,16vw,12.8rem)] font-medium leading-[0.85] tracking-[-0.07em] sm:text-[clamp(5.5rem,16vw,12.8rem)] lg:text-[clamp(5.25rem,9.4vw,9.35rem)]"
               />
             </h1>
 
